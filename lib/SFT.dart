@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:senior_fitness_app/name.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
-
+import 'package:senior_fitness_app/main.dart';
 
 
 class Myfit extends StatelessWidget {
@@ -137,6 +138,10 @@ class Myfit extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyHomePage()),
+                  );
                   // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
                 },
                 style: TextButton.styleFrom(
