@@ -79,10 +79,15 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              const CircleAvatar(
-                backgroundImage: AssetImage('images/rumi.png'),
+              CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 60.0,
+                child: Image.asset(
+                  'images/rumi.png',
+                  width: 120.0,
+                  height: 120.0,
+                  fit: BoxFit.cover, // 이미지를 적절히 확대하여 표시
+                ),
               ),
               const SizedBox(
                 height: 10.0,
