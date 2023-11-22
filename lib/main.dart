@@ -96,7 +96,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  '시작하기',
+                  '끝내기',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
@@ -110,3 +110,4 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
+
