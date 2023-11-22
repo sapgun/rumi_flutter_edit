@@ -96,7 +96,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  '끝내기',
+                  '시작하기',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
