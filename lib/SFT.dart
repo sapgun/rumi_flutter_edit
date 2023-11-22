@@ -20,16 +20,26 @@ class Myfit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Image.asset('images/rumi.png'),
-        title: Text('루미',
-          style: TextStyle(
-            letterSpacing: 2.0,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
+        centerTitle: false,
+        leadingWidth: 80.0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 15.0, top: 10.0), // 여백 추가
+          child: Image.asset('images/rumi.png'),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0), // 텍스트 위쪽 여백 추가
+          child: Text(
+            '루미',
+            style: TextStyle(
+              letterSpacing: 2.0,
+              fontSize: 35.0,
+              fontWeight: FontWeight.bold,
+              height: 1.2, // 텍스트의 높이 조절
+            ),
           ),
         ),
       ),
-      body: Padding(
+  body: Padding(
         padding: const EdgeInsets.fromLTRB(30.0, 40.0, 0.0, 0.0),
         child: Column(
           children: <Widget>[
