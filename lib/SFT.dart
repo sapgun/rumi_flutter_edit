@@ -2,19 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fitness',
-      home: Myfit(),
-    );
-  }
-}
 
 class Myfit extends StatelessWidget {
   static String youtubeId = 'AdYRASHRKwE';

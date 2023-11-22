@@ -3,6 +3,7 @@ import 'package:senior_fitness_app/name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:senior_fitness_app/dashboard.dart';
 import 'package:senior_fitness_app/chatbot.dart';
+import 'package:senior_fitness_app/SFT.dart';
 
 void main() => runApp(const MyApp());
 
@@ -35,7 +36,7 @@ class MyHomePage extends StatelessWidget {
                 onPressed: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Name()),
+                    MaterialPageRoute(builder: (context) => Myfit()),
                   );
                 },
                 style: TextButton.styleFrom(
