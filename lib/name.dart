@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:senior_fitness_app/birth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class Name extends StatefulWidget {
+  const Name({Key? key}) : super(key: key);
+
+  @override
+  State<Name> createState() => _NameState();
+}
+
+class _NameState extends State<Name> {
+  TextEditingController controller1 = TextEditingController();
+  stt.SpeechToText speech = stt.SpeechToText();
+  bool isListening = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 50.0,
+          ),
+          const Text(
+            "이름을 알려주세요",
+            style: TextStyle(
+              fontSize: 40.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Expanded(
+            child: Form(
+              child: Theme(
+                data: ThemeData(
+                  primaryColor: Colors.black,
+                  inputDecorationTheme: const InputDecorationTheme(
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(100.0, 50.0, 100.0, 0.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextField(
+                        controller: controller1,
+                        decoration: const InputDecoration(
+                          labelText: '이름',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                        ),
+                        keyboardType: TextInputType.name,
+                      ),
+                      const SizedBox(
+                        height: 40.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.setString('name', controller1.text);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => BirthDatePage(
+                                name: controller1.text,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(100.0, 50.0),
+                          backgroundColor: Colors.lightBlueAccent,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                          size: 35.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20.0),
+          Text(
+            "눌러서 말하기",
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
+          const SizedBox(height: 10.0),
+          ElevatedButton(
+            onPressed: toggleListening,
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(150.0, 150.0),
+              backgroundColor: Colors.lightBlueAccent,
+              shape: CircleBorder(),
+            ),
+            child: Icon(
+              isListening ? Icons.mic : Icons.mic_off,
+              color: Colors.white,
+              size: 60.0,
+            ),
+          ),
+          SizedBox(height: 50.0),
+        ],
+      ),
+    );
+  }
+
+  void toggleListening() {
+    if (!isListening) {
+      startListening();
+    } else {
+      stopListening();
+    }
+  }
+
+  void startListening() {
+    if (!speech.isListening) {
+      speech.listen(
+        onResult: (result) {
+          if (result.finalResult) {
+            setState(() {
+              controller1.text = result.recognizedWords;
+            });
+          }
+        },
+      );
+      setState(() {
+        isListening = true;
+      });
+    }
+  }
+
+  void stopListening() {
+    if (speech.isListening) {
+      speech.stop();
+      setState(() {
+        isListening = false;
+      });
+    }
+  }
+}
