@@ -8,11 +8,15 @@ class Chatbot extends StatefulWidget {
 }
 
 class _ChatbotState extends State<Chatbot> {
+  Color backgroundColor = Colors.white;
+  Color buttonColor = Colors.lightBlueAccent;
+
+  double buttonWidth = 100;
+
+  List<Widget> buttons = [];
+
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).backgroundColor;
-    Color buttonColor = Colors.lightBlueAccent;
-
     return Scaffold(
       appBar: AppBar(
         leading: Image.asset('images/rumi.png'),
@@ -25,61 +29,64 @@ class _ChatbotState extends State<Chatbot> {
           ),
         ),
       ),
-      body: Stack(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // 첫 번째 버튼
-          Positioned(
-            top: 100,
-            left: 40,
-            child: ElevatedButton(
-              onPressed: () {
-                // 버튼이 눌렸을 때 수행할 동작 추가
-              },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(20),
-                shape: CircleBorder(),
-                primary: buttonColor, // 첫 번째 버튼 배경색을 연한 하늘색으로 설정
-              ),
-              child: Image.asset('images/rumi.png', width: 130, height: 130),
-            ),
+          // 기존 버튼들
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildButton(),
+              SizedBox(width: 20),
+              buildButton(),
+            ],
           ),
-          // 두 번째 버튼
-          Positioned(
-            top: 100,
-            right: 40,
-            child: ElevatedButton(
-              onPressed: () {
-                // 버튼이 눌렸을 때 수행할 동작 추가
-              },
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(20),
-                shape: CircleBorder(),
-                primary: buttonColor, // 두 번째 버튼 배경색을 연한 하늘색으로 설정
-              ),
-              child: Image.asset('images/rumi.png', width: 130, height: 130),
-            ),
-          ),
-          // (처음으로) 버튼
-          Positioned(
-            bottom: 50,
-            left: MediaQuery.of(context).size.width / 2 - 120, // 가운데 정렬을 위해 화면 너비를 이용
-            child: ElevatedButton(
-              onPressed: () {
-                // 처음으로 버튼이 눌렸을 때 메인 페이지로 이동
-                Navigator.pop(context); // 현재 페이지를 스택에서 제거하여 이전 페이지로 이동
-              },
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(240, 80), // 버튼 크기 조절
-                primary: buttonColor, // (처음으로) 버튼 배경색을 연한 하늘색으로 설정
-              ),
-              child: Text(
-                '처음으로',
-                style: TextStyle(fontSize: 30, color: Colors.white),
-              ),
-            ),
+          // 새로 추가된 버튼들
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 20.0,
+            runSpacing: 20.0,
+            children: buttons,
           ),
         ],
       ),
+      // (처음으로) 버튼
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // 처음으로 버튼이 눌렸을 때 메인 페이지로 이동
+          Navigator.pop(context);
+        },
+        label: Text(
+          '처음으로',
+          style: TextStyle(fontSize: 18, color: Colors.white),
+        ),
+        icon: Icon(Icons.arrow_back),
+        backgroundColor: Colors.lightBlueAccent,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  // 새로운 버튼을 추가하는 함수
+  void addNewButton() {
+    setState(() {
+      buttons.add(buildButton());
+    });
+  }
+
+  // 버튼을 만드는 함수
+  Widget buildButton() {
+    return ElevatedButton(
+      onPressed: () {
+        // 두 번째 버튼이 눌렸을 때 새로운 버튼 추가
+        addNewButton();
+      },
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.all(20),
+        shape: CircleBorder(),
+        primary: buttonColor,
+      ),
+      child: Image.asset('images/rumi.png', width: buttonWidth, height: buttonWidth),
     );
   }
 }
