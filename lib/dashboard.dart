@@ -27,10 +27,10 @@ class _DashboardState extends State<Dashboard> {
           ElevatedButton(
             onPressed: () {
               // 첫 번째 버튼을 누르면 다음 페이지로 이동
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FirstPage()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => FirstPage()),
+              // );
             },
             child: Text('첫 번째 페이지로 이동'),
           ),
@@ -38,44 +38,14 @@ class _DashboardState extends State<Dashboard> {
           ElevatedButton(
             onPressed: () {
               // 두 번째 버튼을 누르면 다음 페이지로 이동
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SecondPage()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => SecondPage()),
+              // );
             },
             child: Text('두 번째 페이지로 이동'),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// 첫 번째 페이지
-class FirstPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('첫 번째 페이지'),
-      ),
-      body: Center(
-        child: Text('첫 번째 페이지 내용'),
-      ),
-    );
-  }
-}
-
-// 두 번째 페이지
-class SecondPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('두 번째 페이지'),
-      ),
-      body: Center(
-        child: Text('두 번째 페이지 내용'),
       ),
     );
   }
