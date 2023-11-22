@@ -19,7 +19,7 @@ class Myfit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Image.asset('assets/roomi.png'),
+        leading: Image.asset('images/rumi.png'),
         title: Text('루미',
           style: TextStyle(
             letterSpacing: 2.0,
