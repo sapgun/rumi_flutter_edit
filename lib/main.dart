@@ -3,7 +3,7 @@ import 'package:senior_fitness_app/name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:senior_fitness_app/dashboard.dart';
 
-void main() => runApp(const Myfit());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
