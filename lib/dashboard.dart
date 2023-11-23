@@ -53,7 +53,7 @@ class _DashboardState extends State<Dashboard> {
                     '운동하기',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24.0
+                        fontSize: 28.0
                     ),
                   ),
                 ),
@@ -82,7 +82,7 @@ class _DashboardState extends State<Dashboard> {
                     '말동무',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20.0
+                        fontSize: 28.0
                     ),
                   ),
                 ),
