@@ -32,53 +32,6 @@ class MyHomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextButton(
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Myfit()),
-                  );
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent,
-                  minimumSize: const Size(210.0, 70.0),
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                child: const Text(
-                  '효빈',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30.0,
-                  ),
-                ),
-              ),
-
-              TextButton(
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Chatbot()),
-                  );
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent,
-                  minimumSize: const Size(210.0, 70.0),
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                child: const Text(
-                  '재현',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30.0,
-                  ),
-                ),
-              ),
               CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 60.0,
