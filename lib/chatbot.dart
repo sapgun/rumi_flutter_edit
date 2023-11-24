@@ -48,10 +48,12 @@ class _ChatbotState extends State<Chatbot> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               buildImageWithButton(), // 두 번째 버튼은 이미지가 들어간 버튼
-              SizedBox(width: 40),
+              SizedBox(width: 20), // 기존 버튼들 간격 조절
               buildButton(), // 세 번째 버튼은 + 형태의 아이콘 버튼
             ],
           ),
+          SizedBox(height: 20), // 첫 번째 행과 두 번째 행 간격 조절
+
           // 새로 추가된 버튼들
           Wrap(
             alignment: WrapAlignment.center,
@@ -61,6 +63,7 @@ class _ChatbotState extends State<Chatbot> {
           ),
         ],
       ),
+
       // (처음으로) 버튼
       // floatingActionButton: FloatingActionButton.extended(
       //   onPressed: () {
