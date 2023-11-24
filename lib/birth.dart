@@ -20,21 +20,21 @@ class _BirthDatePageState extends State<BirthDatePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 50.0,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 50.0,
+          ),
+          Text(
+            "생년월일을 알려주세요",
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.085,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
-              "생년월일을 알려주세요",
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.085,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Form(
+          ),
+          Expanded(
+            child: Form(
               child: Theme(
                 data: ThemeData(
                   primaryColor: Colors.black,
@@ -45,8 +45,9 @@ class _BirthDatePageState extends State<BirthDatePage> {
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(100.0, 50.0, 100.0, 0.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      SizedBox(height: 40.0,),
                       TextField(
                         controller: controllerBirthDate,
                         decoration: const InputDecoration(
@@ -66,34 +67,45 @@ class _BirthDatePageState extends State<BirthDatePage> {
                           fontSize: 20.0,
                         ),
                       ),
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.setString('birth', controllerBirthDate.text);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Gender(
-                                name: widget.name,
-                                birthDate: controllerBirthDate.text,
-                              ),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(100.0, 50.0),
-                          backgroundColor: Colors.lightBlueAccent,
-                        ),
-                        child: Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                          size: 35.0,
-                        ),
-                      )
                     ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setString('birth', controllerBirthDate.text);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Gender(
+                        name: widget.name,
+                        birthDate: controllerBirthDate.text,
+                      ),
+                    ),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: const Size(210.0, 70.0),
+                  backgroundColor: Colors.lightBlueAccent,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: Text(
+                  '입력완료',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30.0
                   ),
                 ),
               ),

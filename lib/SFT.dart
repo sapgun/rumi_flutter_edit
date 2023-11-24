@@ -4,7 +4,6 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:senior_fitness_app/main.dart';
 
-
 class Myfit extends StatelessWidget {
   static String youtubeId = 'AdYRASHRKwE';
 
@@ -39,12 +38,12 @@ class Myfit extends StatelessWidget {
           ),
         ),
       ),
-  body: Padding(
+      body: Padding(
         padding: const EdgeInsets.fromLTRB(30.0, 40.0, 0.0, 0.0),
         child: Column(
           children: <Widget>[
             Center(
-              child : Text(
+              child: Text(
                 '홍길동님의 점수는?',
                 style: TextStyle(
                   letterSpacing: 2.0,
@@ -131,11 +130,10 @@ class Myfit extends StatelessWidget {
             SizedBox(
               height: 30.0,
             ),
-
             SizedBox(
               width: 300.0, // 조절하고자 하는 너비
               height: 200.0, // 조절하고자 하는 높이
-              child : YoutubePlayer(
+              child: YoutubePlayer(
                 controller: _con,
               ),
             ),
@@ -149,8 +147,8 @@ class Myfit extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
+                    context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()),
                   );
                   // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
                 },
@@ -164,10 +162,7 @@ class Myfit extends StatelessWidget {
                 ),
                 child: Text(
                   '메인으로 이동',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30.0
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 30.0),
                 ),
               ),
             ),

@@ -47,10 +47,10 @@ class _NameState extends State<Name> {
                   ),
                 ),
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(100.0, 50.0, 100.0, 0.0),
+                  padding: const EdgeInsets.fromLTRB(100.0, 0.0, 100.0, 0.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      SizedBox(height: 40.0,),
                       TextField(
                         controller: controller1,
                         decoration: const InputDecoration(
@@ -61,32 +61,7 @@ class _NameState extends State<Name> {
                         ),
                         keyboardType: TextInputType.name,
                       ),
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.setString('name', controller1.text);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => BirthDatePage(
-                                name: controller1.text,
-                              ),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(100.0, 50.0),
-                          backgroundColor: Colors.lightBlueAccent,
-                        ),
-                        child: const Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                          size: 35.0,
-                        ),
-                      ),
+
                     ],
                   ),
                 ),
@@ -116,6 +91,44 @@ class _NameState extends State<Name> {
           ),
           SizedBox(height: 50.0),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString('name', controller1.text);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => BirthDatePage(
+                        name: controller1.text,
+                      ),
+                    ),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: const Size(210.0, 70.0),
+                  backgroundColor: Colors.lightBlueAccent,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: Text(
+                  '입력완료',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30.0
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

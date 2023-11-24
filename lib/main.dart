@@ -80,7 +80,6 @@ class MyHomePage extends StatelessWidget {
                       await SharedPreferences.getInstance();
                   bool initialDataExists =
                       prefs.getBool('initialDataExists') ?? false;
-
                   if (initialDataExists) {
                     Navigator.pushReplacement(
                       context,
