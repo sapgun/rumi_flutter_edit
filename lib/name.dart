@@ -7,7 +7,7 @@ class Name extends StatefulWidget {
   const Name({Key? key}) : super(key: key);
 
   @override
-  State<Name> createState() => _NameState();
+  _NameState createState() => _NameState();
 }
 
 class _NameState extends State<Name> {
@@ -27,10 +27,10 @@ class _NameState extends State<Name> {
           SizedBox(
             height: 50.0,
           ),
-          const Text(
+          Text(
             "이름을 알려주세요",
             style: TextStyle(
-              fontSize: 40.0,
+              fontSize: MediaQuery.of(context).size.width * 0.085,
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:senior_fitness_app/main.dart';
 
+
 class Gender extends StatefulWidget {
   final String name;
   final String birthDate;
