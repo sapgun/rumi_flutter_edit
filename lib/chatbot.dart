@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:senior_fitness_app/dashboard.dart';
+import 'package:senior_fitness_app/rumi_chat.dart';
 
 class Chatbot extends StatefulWidget {
   const Chatbot({Key? key}) : super(key: key);
@@ -121,8 +122,11 @@ class _ChatbotState extends State<Chatbot> {
   Widget buildImageWithButton() {
     return ElevatedButton(
       onPressed: () {
-        // 이미지가 들어간 버튼이 눌렸을 때 새로운 버튼 추가
-        addNewButton();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => rumi_chat()),
+        );
+        // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
       },
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(20),
