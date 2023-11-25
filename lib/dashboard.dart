@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:senior_fitness_app/SFT.dart';
 import 'package:senior_fitness_app/chatbot.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -10,6 +13,29 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  void getLocation() async{
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position);
+  }
+
+  String? name;
+  String? birth;
+  String? gender;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  _loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      name = prefs.getString('name');
+      birth = prefs.getString('birth');
+      gender = prefs.getString('gender');
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,12 +63,20 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              '$name 님',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20.0,),
             Container(
               width: MediaQuery.of(context).size.width * 0.6,
               height: MediaQuery.of(context).size.width * 0.4,
               child: TextButton(
                 onPressed: () {
-                  // 첫 번째 버튼을 누르면 다음 페이지로 이동
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Myfit()),
@@ -71,7 +105,6 @@ class _DashboardState extends State<Dashboard> {
               height: MediaQuery.of(context).size.width * 0.4,
               child: TextButton(
                 onPressed: () {
-                  // 두 번째 버튼을 누르면 다음 페이지로 이동
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Chatbot()),

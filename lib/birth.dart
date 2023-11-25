@@ -29,7 +29,9 @@ class _BirthDatePageState extends State<BirthDatePage> {
           Text(
             "생년월일을 알려주세요",
             style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.085,
+              fontSize: MediaQuery.of(context).size.width * 0.085 > 40.0
+                ? 40.0
+                : MediaQuery.of(context).size.width * 0.085,
               fontWeight: FontWeight.bold,
             ),
           ),
