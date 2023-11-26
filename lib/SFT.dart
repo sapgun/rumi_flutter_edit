@@ -1,10 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:senior_fitness_app/name.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:senior_fitness_app/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Myfit extends StatelessWidget {
+
+
+class Myfit extends StatefulWidget {
+  const Myfit({Key? key}) : super(key: key);
+
+  @override
+  State<Myfit> createState() => _Myfit();
+}
+
+
+class _Myfit extends State<Myfit> {
+  String? name;
+  String? birth;
+  String? gender;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  _loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      name = prefs.getString('name');
+      birth = prefs.getString('birth');
+      gender = prefs.getString('gender');
+    });
+  }
+
   static String youtubeId = 'AdYRASHRKwE';
 
   final YoutubePlayerController _con = YoutubePlayerController(
@@ -44,7 +73,7 @@ class Myfit extends StatelessWidget {
           children: <Widget>[
             Center(
               child: Text(
-                '홍길동님의 점수는?',
+                '$name 님의 점수는?',
                 style: TextStyle(
                   letterSpacing: 2.0,
                   fontSize: 24.0,
@@ -66,13 +95,56 @@ class Myfit extends StatelessWidget {
             SizedBox(
               height: 30.0,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 70,
+                  height: 50,
+                  color: Color(0xFFCEE9E3), // 'CEE9E3' 색상
+                  child: Center(
+                    child: Text('나이', style: TextStyle(fontSize: 20)),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  height: 50,
+                  color: Colors.white,
+                  child: Center(
+                    child: Text('70', style: TextStyle(fontSize: 20)),
+                  ),
+                ),
+                Container(
+                  width: 100,
+                  height: 50,
+                  color: Color(0xFFCEE9E3), // 'CEE9E3' 색상
+                  child: Center(
+                    child: Text('신체나이', style: TextStyle(fontSize: 20)),
+                  ),
+                ),
+                Container(
+                  width: 70,
+                  height: 50,
+                  color: Colors.white,
+                  child: Center(
+                    child: Text('80', style: TextStyle(fontSize: 20)),
+                  ),
+                ),
+                SizedBox(width: 20),
+              ],
+            ),
+
+            SizedBox(
+              height: 30.0,
+            ),
+
             ElevatedButton(
               onPressed: () {
                 // 여기에 측정하기 버튼이 눌렸을 때의 동작 추가
               },
               style: ElevatedButton.styleFrom(
+                primary: Color(0xFFCEE9E3), // 색상 코드 CEE9E3
                 minimumSize: const Size(210.0, 70.0),
-                primary: Colors.lightBlueAccent,
                 elevation: 5,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -81,8 +153,9 @@ class Myfit extends StatelessWidget {
               child: Text(
                 '측정하기',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -153,15 +226,15 @@ class Myfit extends StatelessWidget {
                   // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
                 },
                 style: TextButton.styleFrom(
+                  backgroundColor: Color(0xFFCEE9E3),
                   minimumSize: const Size(210.0, 70.0),
-                  backgroundColor: Colors.lightBlueAccent,
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
                 child: Text(
-                  '메인으로 이동',
+                  '처음으로 이동',
                   style: TextStyle(color: Colors.white, fontSize: 30.0),
                 ),
               ),
