@@ -140,9 +140,24 @@ class _ChatbotState extends State<Chatbot> {
 
   Future<Contact?> _selectContact() async {
     // 연락처 선택 로직 추가
-    // 예를 들어 contacts_service 패키지를 사용하여 구현 가능
-    // 여기에서는 사용자가 연락처를 선택하는 대화 상자를 표시하지 않았으므로
-    // 간단한 예시로 null을 반환하도록 함
-    return null;
+    Iterable<Contact> contacts = await ContactsService.getContacts(withThumbnails: false);
+    Contact? selectedContact = await showDialog<Contact>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select a contact'),
+          content: Container(
+            width: double.maxFinite,
+            child: ListView(
+              children: contacts.map((contact) => ListTile(
+                title: Text(contact.displayName ?? 'Unknown'),
+                onTap: () => Navigator.of(context).pop(contact),
+              )).toList(),
+            ),
+          ),
+        );
+      },
+    );
+    return selectedContact;
   }
 }

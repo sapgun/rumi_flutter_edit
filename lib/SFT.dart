@@ -3,6 +3,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:senior_fitness_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -18,6 +19,7 @@ class _Myfit extends State<Myfit> {
   String? name;
   String? birth;
   String? gender;
+  String? age;
 
   @override
   void initState() {
@@ -31,7 +33,29 @@ class _Myfit extends State<Myfit> {
       name = prefs.getString('name');
       birth = prefs.getString('birth');
       gender = prefs.getString('gender');
+      if (birth != null) {
+        DateTime birthDate = DateFormat('yyyy-MM-dd').parse(birth!);
+        age = calculateAge(birthDate).toString();
+      }
+
     });
+  }
+
+  int calculateAge(DateTime birthDate) {
+    final currentDate = DateTime.now();
+    int age = currentDate.year - birthDate.year;
+    final int month1 = currentDate.month;
+    final int month2 = birthDate.month;
+    if (month2 > month1) {
+      age--;
+    } else if (month1 == month2) {
+      final int day1 = currentDate.day;
+      final int day2 = birthDate.day;
+      if (day2 > day1) {
+        age--;
+      }
+    }
+    return age;
   }
 
   static String youtubeId = 'AdYRASHRKwE';
@@ -111,7 +135,7 @@ class _Myfit extends State<Myfit> {
                   height: 50,
                   color: Colors.white,
                   child: Center(
-                    child: Text('70', style: TextStyle(fontSize: 20)),
+                    child: Text('$age', style: TextStyle(fontSize: 20)),
                   ),
                 ),
                 Container(
