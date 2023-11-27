@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:senior_fitness_app/loading.dart';
 import 'package:senior_fitness_app/name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:senior_fitness_app/dashboard.dart';
+import 'package:senior_fitness_app/data/my_location.dart';
+import 'package:senior_fitness_app/data/network.dart';
+
+const apiKey = '34d28a43a906e26fedcd5528c23e32df';
 
 void main() => runApp(const MyApp());
 
@@ -28,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String? name;
   String? gender;
+
 
   @override
   void initState() {
@@ -141,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (initialDataExists) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => Dashboard()),
+                      MaterialPageRoute(builder: (context) => Loading()),
                     );
                   } else {
                     prefs.setBool('initialDataExists', true);
