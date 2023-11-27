@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:senior_fitness_app/gender.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class BirthDatePage extends StatefulWidget {
   final String name;
@@ -12,7 +14,8 @@ class BirthDatePage extends StatefulWidget {
 }
 
 class _BirthDatePageState extends State<BirthDatePage> {
-  TextEditingController controllerBirthDate = TextEditingController();
+  DateTime _birthDate = DateTime.now();
+  DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +33,8 @@ class _BirthDatePageState extends State<BirthDatePage> {
             "생년월일을 알려주세요",
             style: TextStyle(
               fontSize: MediaQuery.of(context).size.width * 0.085 > 40.0
-                ? 40.0
-                : MediaQuery.of(context).size.width * 0.085,
+                  ? 40.0
+                  : MediaQuery.of(context).size.width * 0.085,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -47,18 +50,15 @@ class _BirthDatePageState extends State<BirthDatePage> {
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(100.0, 50.0, 100.0, 0.0),
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 40.0,),
-                      TextField(
-                        controller: controllerBirthDate,
-                        decoration: const InputDecoration(
-                          labelText: '생년월일',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          ),
-                        ),
-                        keyboardType: TextInputType.datetime,
+                      BirthDatePicker(
+                        onDateTimeChanged: (newDateTime) {
+                          setState(() {
+                            _birthDate = newDateTime;
+                          });
+                        },
+                        initDateStr: _dateFormat.format(_birthDate),
                       ),
                       const SizedBox(
                         height: 40.0,
@@ -84,13 +84,13 @@ class _BirthDatePageState extends State<BirthDatePage> {
               child: ElevatedButton(
                 onPressed: () async {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.setString('birth', controllerBirthDate.text);
+                  prefs.setString('birth', _dateFormat.format(_birthDate));
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => Gender(
                         name: widget.name,
-                        birthDate: controllerBirthDate.text,
+                        birthDate: _dateFormat.format(_birthDate),
                       ),
                     ),
                   );
@@ -114,6 +114,33 @@ class _BirthDatePageState extends State<BirthDatePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class BirthDatePicker extends StatelessWidget {
+  final void Function(DateTime) onDateTimeChanged;
+  final String initDateStr;
+
+  BirthDatePicker({
+    required this.onDateTimeChanged,
+    this.initDateStr = '2000-01-01',
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final initDate =
+    DateFormat('yyyy-MM-dd').parse(initDateStr ?? '2000-01-01');
+    return SizedBox(
+      height: 300,
+      child: CupertinoDatePicker(
+        minimumYear: 1900,
+        maximumYear: DateTime.now().year,
+        initialDateTime: initDate,
+        maximumDate: DateTime.now(),
+        onDateTimeChanged: onDateTimeChanged,
+        mode: CupertinoDatePickerMode.date,
       ),
     );
   }
