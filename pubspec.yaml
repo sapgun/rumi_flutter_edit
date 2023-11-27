@@ -30,9 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  speech_to_text: ^5.0.3
+  speech_to_text: ^6.4.1
   shared_preferences: ^2.0.12
   geolocator: ^10.1.0
+  contacts_service: ^0.6.3
 
 
   # The following adds the Cupertino Icons font to your application.
