@@ -36,8 +36,6 @@ dependencies:
   intl: ^0.17.0 # 날짜 형식을 위한 패키지
   flutter_datetime_picker: ^1.5.1
   contacts_service: ^0.6.3
-  intl: ^0.17.0 # 날짜 형식을 위한 패키지
-  flutter_datetime_picker: ^1.5.1
 
 
 
