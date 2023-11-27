@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:senior_fitness_app/dashboard.dart';
 import 'package:senior_fitness_app/rumi_chat.dart';
+import 'package:contacts_service/contacts_service.dart';
 
 class Chatbot extends StatefulWidget {
   const Chatbot({Key? key}) : super(key: key);
@@ -63,25 +64,7 @@ class _ChatbotState extends State<Chatbot> {
           ),
         ],
       ),
-
-      // (처음으로) 버튼
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     // 처음으로 버튼이 눌렸을 때 메인 페이지로 이동
-      //     Navigator.pop(context);
-      //   },
-      //   label: Padding(
-      //     padding: const EdgeInsets.symmetric(vertical: 12.0), // 상하 여백 추가
-      //     child: Text(
-      //       '처음으로',
-      //       style: TextStyle(fontSize: 18, color: Colors.white),
-      //     ),
-      //   ),
-      //   icon: Icon(Icons.arrow_back),
-      //   backgroundColor: Colors.lightBlueAccent,
-      // ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // 변경된 부분: BottomAppBar 추가
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: <Widget>[
@@ -92,7 +75,6 @@ class _ChatbotState extends State<Chatbot> {
                     context,
                     MaterialPageRoute(builder: (context) => Dashboard()),
                   );
-                  // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(210.0, 70.0),
@@ -114,22 +96,19 @@ class _ChatbotState extends State<Chatbot> {
     );
   }
 
-  // 새로운 버튼을 추가하는 함수
-  void addNewButton() {
+  void addNewButton(String contactName) {
     setState(() {
-      buttons.add(buildButton());
+      buttons.add(buildButton(contactName));
     });
   }
 
-  // 이미지가 들어간 버튼을 만드는 함수 (두 번째 버튼용)
   Widget buildImageWithButton() {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => rumi_chat()),
         );
-        // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
       },
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(20),
@@ -140,13 +119,15 @@ class _ChatbotState extends State<Chatbot> {
     );
   }
 
-  // 버튼을 만드는 함수
-  Widget buildButton() {
-    // 세 번째 이후의 버튼은 + 형태의 아이콘 버튼
+  Widget buildButton([String? contactName]) {
     return ElevatedButton(
-      onPressed: () {
-        // 버튼이 눌렸을 때 수행할 동작 추가
-        addNewButton();
+      onPressed: () async {
+        // 연락처 선택 기능 추가
+        Contact? selectedContact = await _selectContact();
+        if (selectedContact != null) {
+          // 연락처가 선택되면 선택한 연락처의 이름으로 새로운 버튼 생성
+          addNewButton(selectedContact.displayName ?? 'Unknown');
+        }
       },
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(20),
@@ -155,5 +136,13 @@ class _ChatbotState extends State<Chatbot> {
       ),
       child: Icon(Icons.add, size: buttonWidth), // + 형태의 아이콘
     );
+  }
+
+  Future<Contact?> _selectContact() async {
+    // 연락처 선택 로직 추가
+    // 예를 들어 contacts_service 패키지를 사용하여 구현 가능
+    // 여기에서는 사용자가 연락처를 선택하는 대화 상자를 표시하지 않았으므로
+    // 간단한 예시로 null을 반환하도록 함
+    return null;
   }
 }
