@@ -123,21 +123,10 @@ class _ChatbotState extends State<Chatbot> {
     return ElevatedButton(
       onPressed: () async {
         Contact? selectedContact = await _selectContact();
-        if (selectedContact != null && selectedContact.phones != null && selectedContact.phones?.isNotEmpty == true) {
+        if (selectedContact != null) {
           addNewButton(selectedContact.displayName ?? 'Unknown');
-          String? phoneNumber = selectedContact.phones?.first.value;
-          if (phoneNumber != null) {
-            String uri = 'tel:$phoneNumber';
-            if (await canLaunch(uri)) {
-              await launch(uri);
-            } else {
-              print('Could not launch $uri');
-            }
-          }
         }
       },
-
-
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(20),
         shape: CircleBorder(),
@@ -146,6 +135,8 @@ class _ChatbotState extends State<Chatbot> {
       child: Icon(Icons.add, size: buttonWidth),
     );
   }
+
+
 
   Future<Contact?> _selectContact() async {
     Iterable<Contact> contacts = await ContactsService.getContacts(withThumbnails: false);
