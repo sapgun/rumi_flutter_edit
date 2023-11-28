@@ -3,6 +3,7 @@ import 'package:senior_fitness_app/dashboard.dart';
 import 'package:senior_fitness_app/rumi_chat.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:senior_fitness_app/loading.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Chatbot extends StatefulWidget {
   const Chatbot({Key? key}) : super(key: key);
@@ -45,22 +46,20 @@ class _ChatbotState extends State<Chatbot> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // 기존 버튼들
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildImageWithButton(), // 두 번째 버튼은 이미지가 들어간 버튼
-              SizedBox(width: 20), // 기존 버튼들 간격 조절
-              buildButton(), // 세 번째 버튼은 + 형태의 아이콘 버튼
+              buildImageWithButton(),
+              SizedBox(width: 20),
+              buildButton(),
             ],
           ),
-          SizedBox(height: 20), // 첫 번째 행과 두 번째 행 간격 조절
+          SizedBox(height: 20),
 
-          // 새로 추가된 버튼들
           Wrap(
             alignment: WrapAlignment.center,
-            spacing: 20.0, // 수평 간격 조절
-            runSpacing: 20.0, // 수직 간격 조절
+            spacing: 20.0,
+            runSpacing: 20.0,
             children: buttons,
           ),
         ],
@@ -123,24 +122,32 @@ class _ChatbotState extends State<Chatbot> {
   Widget buildButton([String? contactName]) {
     return ElevatedButton(
       onPressed: () async {
-        // 연락처 선택 기능 추가
         Contact? selectedContact = await _selectContact();
-        if (selectedContact != null) {
-          // 연락처가 선택되면 선택한 연락처의 이름으로 새로운 버튼 생성
+        if (selectedContact != null && selectedContact.phones != null && selectedContact.phones?.isNotEmpty == true) {
           addNewButton(selectedContact.displayName ?? 'Unknown');
+          String? phoneNumber = selectedContact.phones?.first.value;
+          if (phoneNumber != null) {
+            String uri = 'tel:$phoneNumber';
+            if (await canLaunch(uri)) {
+              await launch(uri);
+            } else {
+              print('Could not launch $uri');
+            }
+          }
         }
       },
+
+
       style: ElevatedButton.styleFrom(
         padding: EdgeInsets.all(20),
         shape: CircleBorder(),
         primary: buttonColor,
       ),
-      child: Icon(Icons.add, size: buttonWidth), // + 형태의 아이콘
+      child: Icon(Icons.add, size: buttonWidth),
     );
   }
 
   Future<Contact?> _selectContact() async {
-    // 연락처 선택 로직 추가
     Iterable<Contact> contacts = await ContactsService.getContacts(withThumbnails: false);
     Contact? selectedContact = await showDialog<Contact>(
       context: context,
