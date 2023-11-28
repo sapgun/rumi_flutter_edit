@@ -21,23 +21,22 @@ class _NameState extends State<Name> {
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 50.0,
-          ),
-          Text(
-            "이름을 알려주세요",
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.085 > 40.0
-                  ? 40.0
-                  : MediaQuery.of(context).size.width * 0.085,
-              fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 50.0,
             ),
-          ),
-          Expanded(
-            child: Form(
+            Text(
+              "이름을 알려주세요",
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.085 > 40.0
+                    ? 40.0
+                    : MediaQuery.of(context).size.width * 0.085,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Form(
               child: Theme(
                 data: ThemeData(
                   primaryColor: Colors.black,
@@ -52,7 +51,9 @@ class _NameState extends State<Name> {
                   padding: const EdgeInsets.fromLTRB(100.0, 0.0, 100.0, 0.0),
                   child: Column(
                     children: [
-                      SizedBox(height: 40.0,),
+                      SizedBox(
+                        height: 40.0,
+                      ),
                       TextField(
                         controller: controller1,
                         decoration: const InputDecoration(
@@ -63,36 +64,34 @@ class _NameState extends State<Name> {
                         ),
                         keyboardType: TextInputType.name,
                       ),
-
                     ],
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20.0),
-          Text(
-            "눌러서 말하기",
-            style: TextStyle(
-              fontSize: 20.0,
+            SizedBox(height: 100.0),
+            Text(
+              "눌러서 말하기",
+              style: TextStyle(
+                fontSize: 20.0,
+              ),
             ),
-          ),
-          const SizedBox(height: 10.0),
-          ElevatedButton(
-            onPressed: toggleListening,
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(150.0, 150.0),
-              backgroundColor: Colors.lightBlueAccent,
-              shape: CircleBorder(),
+            const SizedBox(height: 10.0),
+            ElevatedButton(
+              onPressed: toggleListening,
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(150.0, 150.0),
+                backgroundColor: Colors.lightBlueAccent,
+                shape: CircleBorder(),
+              ),
+              child: Icon(
+                isListening ? Icons.mic : Icons.mic_off,
+                color: Colors.white,
+                size: 60.0,
+              ),
             ),
-            child: Icon(
-              isListening ? Icons.mic : Icons.mic_off,
-              color: Colors.white,
-              size: 60.0,
-            ),
-          ),
-          SizedBox(height: 50.0),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
@@ -101,7 +100,7 @@ class _NameState extends State<Name> {
               child: ElevatedButton(
                 onPressed: () async {
                   SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
+                  await SharedPreferences.getInstance();
                   prefs.setString('name', controller1.text);
                   Navigator.push(
                     context,
@@ -122,10 +121,7 @@ class _NameState extends State<Name> {
                 ),
                 child: Text(
                   '입력완료',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30.0
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 30.0),
                 ),
               ),
             ),
