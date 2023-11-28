@@ -158,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Color(0xFF1F4EF5), // '1F4EF5'로 색상 코드를 변경하였습니다.
                   minimumSize: const Size(210.0, 70.0),
                   elevation: 5,
                   shape: RoundedRectangleBorder(

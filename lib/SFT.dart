@@ -97,7 +97,7 @@ class _Myfit extends State<Myfit> {
           children: <Widget>[
             Center(
               child: Text(
-                '$name 님의 점수는?',
+                '$name 님의 결과입니다.',
                 style: TextStyle(
                   letterSpacing: 2.0,
                   fontSize: 24.0,
@@ -125,9 +125,15 @@ class _Myfit extends State<Myfit> {
                 Container(
                   width: 70,
                   height: 50,
-                  color: Color(0xFFCEE9E3), // 'CEE9E3' 색상
+                  color: Color(0xFF1F4EF5), // 'CEE9E3' 색상
                   child: Center(
-                    child: Text('나이', style: TextStyle(fontSize: 20)),
+                    child: Text(
+                      '나이',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white, // 텍스트 색상을 흰색으로 변경
+                      ),
+                    ),
                   ),
                 ),
                 Container(
@@ -141,13 +147,19 @@ class _Myfit extends State<Myfit> {
                 Container(
                   width: 100,
                   height: 50,
-                  color: Color(0xFFCEE9E3), // 'CEE9E3' 색상
+                  color: Color(0xFF1F4EF5), // 'CEE9E3' 색상
                   child: Center(
-                    child: Text('신체나이', style: TextStyle(fontSize: 20)),
+                    child: Text(
+                      '신체나이',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white, // 텍스트 색상을 흰색으로 변경
+                      ),
+                    ),
                   ),
                 ),
                 Container(
-                  width: 70,
+                  width: 120,
                   height: 50,
                   color: Colors.white,
                   child: Center(
@@ -167,7 +179,7 @@ class _Myfit extends State<Myfit> {
                 // 여기에 측정하기 버튼이 눌렸을 때의 동작 추가
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFFCEE9E3), // 색상 코드 CEE9E3
+                primary: Color(0xFF1F4EF5), // 색상 코드 CEE9E3
                 minimumSize: const Size(210.0, 70.0),
                 elevation: 5,
                 shape: RoundedRectangleBorder(
@@ -177,9 +189,9 @@ class _Myfit extends State<Myfit> {
               child: Text(
                 '측정하기',
                 style: TextStyle(
-                  color: Colors.black,
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white, // 텍스트 색상을 흰색으로 변경
                 ),
               ),
             ),
@@ -250,7 +262,7 @@ class _Myfit extends State<Myfit> {
                   // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Color(0xFFCEE9E3),
+                  backgroundColor: Color(0xFF1F4EF5),
                   minimumSize: const Size(210.0, 70.0),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
