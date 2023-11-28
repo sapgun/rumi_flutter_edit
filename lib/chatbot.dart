@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:senior_fitness_app/dashboard.dart';
 import 'package:senior_fitness_app/rumi_chat.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:senior_fitness_app/loading.dart';
 
 class Chatbot extends StatefulWidget {
   const Chatbot({Key? key}) : super(key: key);
@@ -73,7 +74,7 @@ class _ChatbotState extends State<Chatbot> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Dashboard()),
+                    MaterialPageRoute(builder: (context) => Loading()),
                   );
                 },
                 style: TextButton.styleFrom(
