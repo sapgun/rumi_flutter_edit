@@ -22,6 +22,27 @@ class _ChatbotState extends State<Chatbot> {
   List<Widget> buttons = [];
 
   @override
+  void initState() {
+    super.initState();
+    getPermission();
+  }
+
+  void getPermission() async {
+    //(주의) Android 11버전 이상과 iOS에서는 유저가 한 두번 이상 거절하면 다시는 팝업 띄울 수 없습니다.
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      //연락처 권한 줬는지 여부
+      print('허락됨');
+    } else if (status.isDenied) {
+      print('거절됨');
+      await Permission.contacts.request(); //허락해달라고 팝업띄우는 코드
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -181,22 +202,3 @@ class _ChatbotState extends State<Chatbot> {
   }
 }
 
-getPermission() async {
-  //(주의) Android 11버전 이상과 iOS에서는 유저가 한 두번 이상 거절하면 다시는 팝업 띄울 수 없습니다.
-  var status = await Permission.contacts.status;
-  if (status.isGranted) {
-    //연락처 권한 줬는지 여부
-    print('허락됨');
-
-    ///썸네일제외한 연락처 가져오기
-    var contacts = await ContactsService.getContacts(withThumbnails: false);
-  } else if (status.isDenied) {
-    print('거절됨');
-    Permission.contacts.request(); //허락해달라고 팝업띄우는 코드
-  }
-  //하지만 아이폰의 경우 OS가 금지하는 경우도 있고 (status.isRestricted)
-  (status.isPermanentlyDenied);
-  if (status.isPermanentlyDenied) {
-    openAppSettings();
-  }
-}
