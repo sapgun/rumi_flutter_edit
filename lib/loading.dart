@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:senior_fitness_app/dashboard.dart';
 import 'package:senior_fitness_app/data/my_location.dart';
 import 'package:senior_fitness_app/data/network.dart';
@@ -21,6 +22,7 @@ class _LoadingState extends State<Loading> {
   }
 
   void getLocation() async {
+    LocationPermission permission = await Geolocator.requestPermission();
     MyLocation myLocation = MyLocation();
     await myLocation.getMyCurrentLocation();
     latitude3 = myLocation.latitude2;
@@ -28,7 +30,8 @@ class _LoadingState extends State<Loading> {
 
     Network network = Network(
         'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apiKey&units=metric',
-        'https://api.openweathermap.org/data/2.5/air_pollution?lat=$latitude3&lon=$longitude3&appid=$apiKey');
+        'https://api.openweathermap.org/data/2.5/air_pollution?lat=$latitude3&lon=$longitude3&appid=$apiKey'
+    );
     var weatherData = await network.getJsonData();
     print(weatherData);
 
