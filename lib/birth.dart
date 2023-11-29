@@ -132,8 +132,13 @@ class BirthDatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final initDate =
     DateFormat('yyyy-MM-dd').parse(initDateStr ?? '2000-01-01');
+
+    double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
+
     return SizedBox(
-      height: 300,
+      height: deviceHeight * 0.3, // Adjust as needed
+      width: deviceWidth * 0.8, // Adjust as needed
       child: CupertinoDatePicker(
         minimumYear: 1900,
         maximumYear: DateTime.now().year,
