@@ -4,6 +4,7 @@ import 'package:senior_fitness_app/rumi_chat.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:senior_fitness_app/loading.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Chatbot extends StatefulWidget {
   const Chatbot({Key? key}) : super(key: key);
@@ -55,7 +56,6 @@ class _ChatbotState extends State<Chatbot> {
             ],
           ),
           SizedBox(height: 20),
-
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 20.0,
@@ -96,11 +96,28 @@ class _ChatbotState extends State<Chatbot> {
     );
   }
 
-  void addNewButton(String contactName) {
-    setState(() {
-      buttons.add(buildButton(contactName));
-    });
+  void addNewButton(String contactName) async {
+    var status = await Permission.contacts.status;
+    if (status.isGranted) {
+      setState(() {
+        buttons.add(buildButton(contactName));
+      });
+    } else if (status.isDenied) {
+      // 권한이 거부된 경우, 사용자에게 권한 요청 팝업을 띄우도록 처리
+      await Permission.contacts.request();
+      // 다시 권한 상태 확인 후 버튼 추가
+      status = await Permission.contacts.status;
+      if (status.isGranted) {
+        setState(() {
+          buttons.add(buildButton(contactName));
+        });
+      }
+    } else if (status.isPermanentlyDenied) {
+      // 영구적으로 권한이 거부된 경우, 설정으로 이동
+      openAppSettings();
+    }
   }
+
 
   Widget buildImageWithButton() {
     return ElevatedButton(
@@ -115,7 +132,8 @@ class _ChatbotState extends State<Chatbot> {
         shape: CircleBorder(),
         primary: buttonColor,
       ),
-      child: Image.asset('images/rumi.png', width: buttonWidth, height: buttonWidth),
+      child: Image.asset('images/rumi.png',
+          width: buttonWidth, height: buttonWidth),
     );
   }
 
@@ -125,6 +143,7 @@ class _ChatbotState extends State<Chatbot> {
         Contact? selectedContact = await _selectContact();
         if (selectedContact != null) {
           addNewButton(selectedContact.displayName ?? 'Unknown');
+          getPermission();
         }
       },
       style: ElevatedButton.styleFrom(
@@ -136,10 +155,9 @@ class _ChatbotState extends State<Chatbot> {
     );
   }
 
-
-
   Future<Contact?> _selectContact() async {
-    Iterable<Contact> contacts = await ContactsService.getContacts(withThumbnails: false);
+    Iterable<Contact> contacts =
+        await ContactsService.getContacts(withThumbnails: false);
     Contact? selectedContact = await showDialog<Contact>(
       context: context,
       builder: (BuildContext context) {
@@ -148,15 +166,37 @@ class _ChatbotState extends State<Chatbot> {
           content: Container(
             width: double.maxFinite,
             child: ListView(
-              children: contacts.map((contact) => ListTile(
-                title: Text(contact.displayName ?? 'Unknown'),
-                onTap: () => Navigator.of(context).pop(contact),
-              )).toList(),
+              children: contacts
+                  .map((contact) => ListTile(
+                        title: Text(contact.displayName ?? 'Unknown'),
+                        onTap: () => Navigator.of(context).pop(contact),
+                      ))
+                  .toList(),
             ),
           ),
         );
       },
     );
     return selectedContact;
+  }
+}
+
+getPermission() async {
+  //(주의) Android 11버전 이상과 iOS에서는 유저가 한 두번 이상 거절하면 다시는 팝업 띄울 수 없습니다.
+  var status = await Permission.contacts.status;
+  if (status.isGranted) {
+    //연락처 권한 줬는지 여부
+    print('허락됨');
+
+    ///썸네일제외한 연락처 가져오기
+    var contacts = await ContactsService.getContacts(withThumbnails: false);
+  } else if (status.isDenied) {
+    print('거절됨');
+    Permission.contacts.request(); //허락해달라고 팝업띄우는 코드
+  }
+  //하지만 아이폰의 경우 OS가 금지하는 경우도 있고 (status.isRestricted)
+  (status.isPermanentlyDenied);
+  if (status.isPermanentlyDenied) {
+    openAppSettings();
   }
 }
