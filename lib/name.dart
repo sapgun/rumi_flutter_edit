@@ -69,7 +69,7 @@ class _NameState extends State<Name> {
                 ),
               ),
             ),
-            SizedBox(height: 100.0),
+            SizedBox(height: 300.0),
             Text(
               "눌러서 말하기",
               style: TextStyle(
