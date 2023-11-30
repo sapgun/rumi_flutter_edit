@@ -156,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (initialDataExists) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => Loading()),
+                      MaterialPageRoute(builder: (context) => Name()),
                     );
                   } else {
                     prefs.setBool('initialDataExists', true);

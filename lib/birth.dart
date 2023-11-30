@@ -40,15 +40,15 @@ class _BirthDatePageState extends State<BirthDatePage> {
               ),
             ),
             Form(
-              // child: Theme(
-              //   data: ThemeData(
-              //     primaryColor: Colors.black,
-              //     inputDecorationTheme: const InputDecorationTheme(
-              //       labelStyle: TextStyle(
-              //           color: Colors.black,
-              //           fontSize: 1.0),
-              //     ),
-              //   ),
+              child: Theme(
+                data: ThemeData(
+                  primaryColor: Colors.black,
+                  inputDecorationTheme: const InputDecorationTheme(
+                    labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10.0),
+                  ),
+                ),
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(100.0, 50.0, 100.0, 0.0),
                   child: Column(
@@ -66,7 +66,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
                   ),
                 ),
               ),
-            // ),
+            ),
             SizedBox(
               height: 40.0,
             ),
