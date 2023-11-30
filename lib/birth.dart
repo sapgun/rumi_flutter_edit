@@ -144,7 +144,8 @@ class BirthDatePicker extends StatelessWidget {
         textTheme: CupertinoTextThemeData(
           dateTimePickerTextStyle: TextStyle(
             fontSize: deviceWidth * 0.04,
-            fontWeight: FontWeight.bold,
+            // fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
       ),
