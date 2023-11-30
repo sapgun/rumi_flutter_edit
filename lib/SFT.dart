@@ -67,6 +67,7 @@ class _Myfit extends State<Myfit> {
       mute: false,
     ),
   );
+  bool showOtherData = false;
 
   @override
   Widget build(BuildContext context) {
@@ -108,17 +109,7 @@ class _Myfit extends State<Myfit> {
             SizedBox(
               height: 30.0,
             ),
-            Text(
-              '90점',
-              style: TextStyle(
-                letterSpacing: 2.0,
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -159,7 +150,7 @@ class _Myfit extends State<Myfit> {
                   ),
                 ),
                 Container(
-                  width: 120,
+                  width: 110,
                   height: 50,
                   color: Colors.white,
                   child: Center(
@@ -197,58 +188,121 @@ class _Myfit extends State<Myfit> {
             ),
             SizedBox(
               height: 30.0,
-            ),
+            ), // 다른 데이터를 보여줄지 여부를 저장하는 변수
+
             Container(
-              width: 300.0, // 조절하고자 하는 너비
-              height: 200.0, // 조절하고자 하는 높이
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(show: false),
-                  titlesData: FlTitlesData(show: false),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: Border.all(
-                      color: const Color(0xff37434d),
-                      width: 1,
+            width: 800,
+            height: 700,
+            decoration: BoxDecoration(
+              color: Color(0xFF83B4F9),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 30.0,
+                ),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          child: showOtherData
+                          ? Container(
+                        // 다른 데이터 보여주는 위젯 구현
+                      )
+                       : Text(
+                        '30초간 아령 들기 [상체근력]',
+                        style: TextStyle(
+                          letterSpacing: 2.0,
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            showOtherData = !showOtherData; // 버튼 클릭 시 다른 데이터를 보여줄지 여부를 변경
+                          });
+                        },
+                        child: Text(
+                          '다음',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Container(
+                  width: 300.0, // 조절하고자 하는 너비
+                  height: 200.0, // 조절하고자 하는 높이
+                  child: showOtherData
+                      ? Container(
+                    // 다른 데이터 보여주는 위젯 구현
+                  )
+                      : LineChart(
+                    LineChartData(
+                      backgroundColor: Color(0xFFFFFDFD),
+                      gridData: FlGridData(show: false),
+                      titlesData: FlTitlesData(show: false),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1,
+                        ),
+                      ),
+                      minX: 0,
+                      maxX: 7,
+                      minY: 0,
+                      maxY: 100,
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: [
+                            FlSpot(0, 30),
+                            FlSpot(1, 40),
+                            FlSpot(2, 20),
+                            FlSpot(3, 60),
+                            FlSpot(4, 50),
+                            FlSpot(5, 70),
+                            FlSpot(6, 70),
+                            FlSpot(7, 90),
+                          ],
+                          isCurved: true,
+                          dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(show: false),
+                        ),
+                      ],
                     ),
                   ),
-                  minX: 0,
-                  maxX: 7,
-                  minY: 0,
-                  maxY: 100,
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: [
-                        FlSpot(0, 30),
-                        FlSpot(1, 40),
-                        FlSpot(2, 20),
-                        FlSpot(3, 60),
-                        FlSpot(4, 50),
-                        FlSpot(5, 70),
-                        FlSpot(6, 70),
-                        FlSpot(7, 90),
-                      ],
-                      isCurved: true,
-                      dotData: FlDotData(show: false),
-                      belowBarData: BarAreaData(show: false),
-                    ),
-                  ],
                 ),
-              ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Container(
+                  width: 300.0, // 조절하고자 하는 너비
+                  height: 200.0, // 조절하고자 하는 높이
+                  child: showOtherData
+                      ? Container(
+                    // 다른 데이터 보여주는 위젯 구현
+                  )
+                  : YoutubePlayer(
+                      controller: _con,
+                    ),
+                  ),
+              ],
             ),
-            SizedBox(
-              height: 30.0,
-            ),
-            SizedBox(
-              width: 300.0, // 조절하고자 하는 너비
-              height: 200.0, // 조절하고자 하는 높이
-              child: YoutubePlayer(
-                controller: _con,
-              ),
-            ),
-          ],
+          ),
+         ],
         ),
       ),
+
       bottomNavigationBar: BottomAppBar(
         child: Row(
           children: <Widget>[
