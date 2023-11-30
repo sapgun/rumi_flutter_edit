@@ -14,7 +14,7 @@ class BirthDatePage extends StatefulWidget {
 }
 
 class _BirthDatePageState extends State<BirthDatePage> {
-  DateTime _birthDate = DateTime.now();
+  DateTime _birthDate = DateTime(1970, 1, 1);
   DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
   @override
@@ -23,28 +23,30 @@ class _BirthDatePageState extends State<BirthDatePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 50.0,
-          ),
-          Text(
-            "생년월일을 알려주세요",
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.085 > 40.0
-                  ? 40.0
-                  : MediaQuery.of(context).size.width * 0.085,
-              fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 50.0,
             ),
-          ),
-          Expanded(
-            child: Form(
+            Text(
+              "생년월일을 알려주세요",
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.085 > 40.0
+                    ? 40.0
+                    : MediaQuery.of(context).size.width * 0.085,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Form(
               child: Theme(
                 data: ThemeData(
                   primaryColor: Colors.black,
                   inputDecorationTheme: const InputDecorationTheme(
-                    labelStyle: TextStyle(color: Colors.black, fontSize: 20.0),
+                    labelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10.0),
                   ),
                 ),
                 child: Container(
@@ -60,22 +62,24 @@ class _BirthDatePageState extends State<BirthDatePage> {
                         },
                         initDateStr: _dateFormat.format(_birthDate),
                       ),
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                      Text(
-                        '이름: ${widget.name}',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                        ),
-                      ),
                     ],
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              height: 40.0,
+            ),
+            Text(
+              '이름: ${widget.name}',
+              style: TextStyle(
+                fontSize: 20.0,
+              ),
+            ),
+            SizedBox(height: 10.0,),
+            // SizedBox(height: 0.0,),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
@@ -130,22 +134,32 @@ class BirthDatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initDate =
-    DateFormat('yyyy-MM-dd').parse(initDateStr ?? '2000-01-01');
+    final initDate = DateFormat('yyyy-MM-dd').parse(initDateStr ?? '2000-01-01');
 
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
 
-    return SizedBox(
-      height: deviceHeight * 0.3, // Adjust as needed
-      width: deviceWidth * 0.8, // Adjust as needed
-      child: CupertinoDatePicker(
-        minimumYear: 1900,
-        maximumYear: DateTime.now().year,
-        initialDateTime: initDate,
-        maximumDate: DateTime.now(),
-        onDateTimeChanged: onDateTimeChanged,
-        mode: CupertinoDatePickerMode.date,
+    return CupertinoTheme(
+      data: CupertinoThemeData(
+        textTheme: CupertinoTextThemeData(
+          dateTimePickerTextStyle: TextStyle(
+            fontSize: deviceWidth * 0.04,
+            // fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      child: SizedBox(
+        height: deviceHeight * 0.2,
+        width: deviceWidth * 0.8,
+        child: CupertinoDatePicker(
+          minimumYear: 1900,
+          maximumYear: DateTime.now().year,
+          initialDateTime: initDate,
+          maximumDate: DateTime.now(),
+          onDateTimeChanged: onDateTimeChanged,
+          mode: CupertinoDatePickerMode.date,
+        ),
       ),
     );
   }
