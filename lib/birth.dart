@@ -143,15 +143,15 @@ class BirthDatePicker extends StatelessWidget {
       data: CupertinoThemeData(
         textTheme: CupertinoTextThemeData(
           dateTimePickerTextStyle: TextStyle(
-            fontSize: deviceWidth * 0.04,
+            fontSize: (deviceHeight * 0.02 + deviceWidth * 0.02) / 2,
             // fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
       ),
       child: SizedBox(
-        height: deviceHeight * 0.2,
-        width: deviceWidth * 0.8,
+        height: deviceHeight * 0.3,
+        width: deviceWidth * 1,
         child: CupertinoDatePicker(
           minimumYear: 1900,
           maximumYear: DateTime.now().year,
