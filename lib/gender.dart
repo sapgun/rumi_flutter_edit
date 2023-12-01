@@ -37,18 +37,23 @@ class _GenderState extends State<Gender> {
         backgroundColor: Colors.white,
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: 50.0,
-          ),
-          Text(
-            "성별을 선택해주세요",
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.085 > 40.0
-                ? 40.0
-                : MediaQuery.of(context).size.width * 0.085,
-              fontWeight: FontWeight.bold,
-            ),
+          Column(
+            children: [
+              SizedBox(
+                height: 50.0,
+              ),
+              Text(
+                "성별을 선택해주세요",
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.085 > 40.0
+                      ? 40.0
+                      : MediaQuery.of(context).size.width * 0.085,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
           Form(
             child: Theme(
@@ -60,10 +65,8 @@ class _GenderState extends State<Gender> {
               ),
               child: Container(
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // SizedBox(height: 40.0,),
+                    SizedBox(height: 40.0,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -71,32 +74,29 @@ class _GenderState extends State<Gender> {
                         buildGenderCard('여성', Icons.female),
                       ],
                     ),
-                    SizedBox(
-                      height: 40.0,
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          '이름: ${widget.name}',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        ),
-                        Text(
-                          '생년월일: ${widget.birthDate}',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 40.0,
-                    ),
                   ],
                 ),
               ),
             ),
+          ),
+          Column(
+            children: [
+              Text(
+                '이름: ${widget.name}',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              Text(
+                '생년월일: ${widget.birthDate}',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 40.0,
           ),
         ],
       ),
@@ -162,7 +162,7 @@ class _GenderState extends State<Gender> {
               Text(
                 gender,
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: MediaQuery.of(context).size.width * 0.045,
                   color: selectedGender == gender ? Colors.white : Colors.black,
                 ),
               ),
