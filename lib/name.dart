@@ -51,9 +51,7 @@ class _NameState extends State<Name> {
                   padding: const EdgeInsets.fromLTRB(100.0, 0.0, 100.0, 0.0),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: 40.0,
-                      ),
+                      SizedBox(height: 40.0,),
                       TextField(
                         controller: controller1,
                         decoration: const InputDecoration(

@@ -37,7 +37,6 @@ class _GenderState extends State<Gender> {
         backgroundColor: Colors.white,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             height: 50.0,
@@ -51,47 +50,50 @@ class _GenderState extends State<Gender> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Expanded(
-            child: Form(
-              child: Theme(
-                data: ThemeData(
-                  primaryColor: Colors.black,
-                  inputDecorationTheme: const InputDecorationTheme(
-                    labelStyle: TextStyle(color: Colors.black, fontSize: 20.0),
-                  ),
+          Form(
+            child: Theme(
+              data: ThemeData(
+                primaryColor: Colors.black,
+                inputDecorationTheme: const InputDecorationTheme(
+                  labelStyle: TextStyle(color: Colors.black, fontSize: 20.0),
                 ),
-                child: Container(
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 40.0,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          buildGenderCard('남성', Icons.male),
-                          buildGenderCard('여성', Icons.female),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                      Text(
-                        '이름: ${widget.name}',
-                        style: TextStyle(
-                          fontSize: 20.0,
+              ),
+              child: Container(
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // SizedBox(height: 40.0,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        buildGenderCard('남성', Icons.male),
+                        buildGenderCard('여성', Icons.female),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 40.0,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          '이름: ${widget.name}',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '생년월일: ${widget.birthDate}',
-                        style: TextStyle(
-                          fontSize: 20.0,
+                        Text(
+                          '생년월일: ${widget.birthDate}',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 40.0,
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 40.0,
+                    ),
+                  ],
                 ),
               ),
             ),
