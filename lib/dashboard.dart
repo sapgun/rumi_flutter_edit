@@ -25,6 +25,7 @@ class _DashboardState extends State<Dashboard> {
   String? name;
   String? birth;
   String? gender;
+  String? cityCode;
   String? cityName;
   int? temp;
   Widget? icon;
@@ -48,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
     int index = airData['list'][0]['main']['aqi'];
     des = weatherData['weather'][0]['description'];
     temp = temp2.round();
-    cityName = weatherData['name'];
+    cityName = model.getKrCityName(weatherData['name']);
     icon = model.getWeatherIcon(condition);
     airIcon = model.getAirIcon(index);
     airState = model.getAirCondition(index);
@@ -58,7 +59,7 @@ class _DashboardState extends State<Dashboard> {
 
   String getSystemTime() {
     var now = DateTime.now();
-    return DateFormat("h:mm a").format(now);
+    return DateFormat("a h:mm", 'ko_KR').format(now);
   }
 
   _loadData() async {
@@ -118,6 +119,13 @@ class _DashboardState extends State<Dashboard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Text(
+                          DateFormat('yyyy년 MM월 dd일 EEEE ', 'ko_KR').format(date),
+                          style: GoogleFonts.lato(
+                            fontSize: 16.0,
+                            color: Colors.black,
+                          ),
+                        ),
                         TimerBuilder.periodic(
                           (Duration(minutes: 1)),
                           builder: (context) {
@@ -130,20 +138,6 @@ class _DashboardState extends State<Dashboard> {
                               ),
                             );
                           },
-                        ),
-                        Text(
-                          DateFormat(' - EEEE').format(date),
-                          style: GoogleFonts.lato(
-                            fontSize: 16.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Text(
-                          DateFormat('d MMM, yyy').format(date),
-                          style: GoogleFonts.lato(
-                            fontSize: 16.0,
-                            color: Colors.black,
-                          ),
                         ),
                       ],
                     ),
@@ -300,7 +294,7 @@ class _DashboardState extends State<Dashboard> {
                       style: TextStyle(color: Colors.white, fontSize: 28.0),
                     ),
                     style: TextButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Color(0xFF1F4EF5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
@@ -323,7 +317,7 @@ class _DashboardState extends State<Dashboard> {
                       style: TextStyle(color: Colors.white, fontSize: 28.0),
                     ),
                     style: TextButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Color(0xFF1F4EF5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),

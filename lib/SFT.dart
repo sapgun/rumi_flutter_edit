@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:senior_fitness_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
-
+import 'package:video_player/video_player.dart';
 
 
 class Myfit extends StatefulWidget {
@@ -20,10 +20,16 @@ class _Myfit extends State<Myfit> {
   String? birth;
   String? gender;
   String? age;
+  VideoPlayerController? _controller;
+  final String videoPath = 'images/2.mp4'; // 동영상 URL를 지정해주세요.
 
   @override
   void initState() {
     super.initState();
+    _controller = VideoPlayerController.network(videoPath)
+      ..initialize().then((_) {
+        setState(() {});
+      });
     _loadData();
   }
 
@@ -68,6 +74,7 @@ class _Myfit extends State<Myfit> {
     ),
   );
   bool showOtherData = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -168,8 +175,16 @@ class _Myfit extends State<Myfit> {
 
               ElevatedButton(
                 onPressed: () {
+                    if (_controller!.value.isInitialized) {
+                      setState(() {
+                        _controller!.value.isPlaying
+                            ? _controller!.pause()
+                            : _controller!.play();
+                      });
+                    }
                   // 여기에 측정하기 버튼이 눌렸을 때의 동작 추가
                 },
+
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF1F4EF5), // 색상 코드 CEE9E3
                   minimumSize: const Size(210.0, 70.0),
@@ -190,7 +205,20 @@ class _Myfit extends State<Myfit> {
               SizedBox(
                 height: 30.0,
               ), // 다른 데이터를 보여줄지 여부를 저장하는 변수
-
+              Container(
+                width: 300.0, // 조절하고자 하는 너비
+                height: 200.0, // 조절하고자 하는 높이
+                child: showOtherData
+                    ? Container(
+                  // 다른 데이터 보여주는 위젯 구현
+                )
+                    : _controller!.value.isInitialized
+                    ? AspectRatio(
+                  aspectRatio: _controller!.value.aspectRatio,
+                  child: VideoPlayer(_controller!),
+                )
+                    : Container(),
+              ),
               Container(
               width: 800,
               height: 700,
