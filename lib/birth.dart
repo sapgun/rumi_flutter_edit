@@ -101,7 +101,7 @@ class _BirthDatePageState extends State<BirthDatePage> {
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(210.0, 70.0),
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Color(0xFF1F4EF5),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
