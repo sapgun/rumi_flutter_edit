@@ -209,20 +209,7 @@ class _Myfit extends State<Myfit> {
               SizedBox(
                 height: 30.0,
               ), // 다른 데이터를 보여줄지 여부를 저장하는 변수
-              Container(
-                width: 300.0, // 조절하고자 하는 너비
-                height: 200.0, // 조절하고자 하는 높이
-                child: showOtherData
-                    ? Container(
-                  // 다른 데이터 보여주는 위젯 구현
-                )
-                    : _controller!.value.isInitialized
-                    ? AspectRatio(
-                  aspectRatio: _controller!.value.aspectRatio,
-                  child: VideoPlayer(_controller!),
-                )
-                    : Container(),
-              ),
+
               Container(
               width: 800,
               height: 700,
