@@ -5,7 +5,7 @@ import 'package:senior_fitness_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:senior_fitness_app/video2.dart';
 
 class Myfit extends StatefulWidget {
   const Myfit({Key? key}) : super(key: key);
@@ -175,14 +175,18 @@ class _Myfit extends State<Myfit> {
 
               ElevatedButton(
                 onPressed: () {
-                    if (_controller!.value.isInitialized) {
-                      setState(() {
-                        _controller!.value.isPlaying
-                            ? _controller!.pause()
-                            : _controller!.play();
-                      });
-                    }
+                  if (_controller!.value.isInitialized) {
+                    setState(() {
+                      _controller!.value.isPlaying
+                          ? _controller!.pause()
+                          : _controller!.play();
+                    });
+                  }
                   // 여기에 측정하기 버튼이 눌렸을 때의 동작 추가
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => VideoScreen()),
+                  );
                 },
 
                 style: ElevatedButton.styleFrom(
