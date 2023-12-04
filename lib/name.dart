@@ -79,7 +79,7 @@ class _NameState extends State<Name> {
               onPressed: toggleListening,
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(150.0, 150.0),
-                backgroundColor: Colors.lightBlueAccent,
+                backgroundColor: Color(0xFF1F4EF5),
                 shape: CircleBorder(),
               ),
               child: Icon(
@@ -111,7 +111,7 @@ class _NameState extends State<Name> {
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(210.0, 70.0),
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Color(0xFF1F4EF5),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),

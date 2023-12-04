@@ -111,7 +111,7 @@ class _GenderState extends State<Gender> {
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(210.0, 70.0),
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Color(0xFF1F4EF5),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -145,7 +145,7 @@ class _GenderState extends State<Gender> {
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: selectedGender == gender
-              ? Colors.lightBlueAccent
+              ? Color(0xFF1F4EF5)
               : Colors.grey[200],
           borderRadius: BorderRadius.circular(15.0),
         ),

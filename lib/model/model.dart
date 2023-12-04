@@ -65,6 +65,16 @@ class Model {
     }
   }
 
+  String? getKrCityName(String cityName) {
+    if (cityName == "Seoul") return "서울";
+    else if (cityName == "Busan") return "부산";
+    else if (cityName == "Daejeon") return "대전";
+    else if (cityName == "Gwangju") return "광주";
+    else if (cityName == "Ulsan") return "울산";
+    else if (cityName == "Daegu") return "대구";
+    else return cityName;
+}
+
   Widget? getAirCondition(int index){
     if (index == 1) {
       return Text(
