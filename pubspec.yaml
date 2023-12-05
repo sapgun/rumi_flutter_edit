@@ -51,6 +51,10 @@ dependencies:
   youtube_player_flutter:
   fl_chart: ^0.64.0
   video_player: ^2.8.1
+  sqflite: ^2.2.8
+  mysql_client: ^0.0.27
+
+
 
 dev_dependencies:
   flutter_test:
