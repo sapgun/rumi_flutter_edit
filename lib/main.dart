@@ -6,31 +6,12 @@ import 'package:senior_fitness_app/dashboard.dart';
 import 'package:senior_fitness_app/data/my_location.dart';
 import 'package:senior_fitness_app/data/network.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mysql_client/mysql_client.dart';
+
 
 const apiKey = '34d28a43a906e26fedcd5528c23e32df';
 
 void main() => runApp(const MyApp());
-Future<void> dbConnector() async {
-  print("Connecting to mysql server...");
 
-  // MySQL 접속 설정
-  final conn = await MySQLConnection.createConnection(
-    host: 'localhost',
-    port: 3306,
-    userName: 'root',
-    password: '0000',
-    databaseName: 'rumi', // optional
-  );
-
-  // 연결 대기
-  await conn.connect();
-
-  print("Connected");
-
-  // 종료 대기
-  await conn.close();
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
