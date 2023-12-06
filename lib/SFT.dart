@@ -6,6 +6,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 import 'package:senior_fitness_app/video2.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+
+Future<List<dynamic>> fetchData() async {
+  final response = await http.get(Uri.parse('http://localhost:3000/fitness'));
+
+
+
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body);
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
 
 class Myfit extends StatefulWidget {
   const Myfit({Key? key}) : super(key: key);
@@ -16,6 +31,7 @@ class Myfit extends StatefulWidget {
 
 
 class _Myfit extends State<Myfit> {
+  Future<List<dynamic>>? futureData;
   String? name;
   String? birth;
   String? gender;
@@ -30,6 +46,7 @@ class _Myfit extends State<Myfit> {
       ..initialize().then((_) {
         setState(() {});
       });
+    futureData = fetchData();
     _loadData();
   }
 
@@ -113,6 +130,20 @@ class _Myfit extends State<Myfit> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              FutureBuilder<List<dynamic>>(
+                future: futureData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data.toString());
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                  return CircularProgressIndicator();
+                },
               ),
               SizedBox(
                 height: 30.0,
