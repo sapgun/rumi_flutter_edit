@@ -8,12 +8,10 @@ import 'package:video_player/video_player.dart';
 import 'package:senior_fitness_app/video2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:senior_fitness_app/posedetecter.dart';
 
 Future<List<dynamic>> fetchData() async {
   final response = await http.get(Uri.parse('http://localhost:3000/fitness'));
-
-
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
@@ -199,11 +197,34 @@ class _Myfit extends State<Myfit> {
                   SizedBox(width: 20),
                 ],
               ),
-
               SizedBox(
                 height: 30.0,
               ),
-
+              Container(
+                width: MediaQuery.of(context).size.width * 0.2,
+                height: MediaQuery.of(context).size.width * 0.1,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Myfit()),
+                    );
+                  },
+                  child: Text(
+                    '임시버튼',
+                    style: TextStyle(color: Colors.white, fontSize: 28.0),
+                  ),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color(0xFF1F4EF5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
               ElevatedButton(
                 onPressed: () {
                   if (_controller!.value.isInitialized) {
@@ -216,7 +237,7 @@ class _Myfit extends State<Myfit> {
                   // 여기에 측정하기 버튼이 눌렸을 때의 동작 추가
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => VideoScreen()),
+                    MaterialPageRoute(builder: (context) => posedetecter()),
                   );
                 },
 
@@ -239,7 +260,8 @@ class _Myfit extends State<Myfit> {
               ),
               SizedBox(
                 height: 30.0,
-              ), // 다른 데이터를 보여줄지 여부를 저장하는 변수
+              ),
+              // 다른 데이터를 보여줄지 여부를 저장하는 변수
 
               Container(
               width: 800,
