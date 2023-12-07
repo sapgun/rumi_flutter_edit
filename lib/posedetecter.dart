@@ -7,14 +7,18 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'detector_view.dart';
 import 'painters/pose_painter.dart';
 
-// 팔굽혀펴기 상태
-enum PushUpState {
-  up, down
+// 의자에서 앉았다 일어나기 상태
+enum SitStandState {
+  sit, stand
 }
 
-// 팔굽혀펴기 카운트와 상태
-int _pushUpCount = 0;
-PushUpState _pushUpState = PushUpState.up;
+// 의자에서 앉았다 일어나기 카운트와 상태
+int _sitStandCount = 0;
+SitStandState _sitStandState = SitStandState.stand;
+
+// 운동 제한 시간 (30초)
+final _exerciseTimeLimit = Duration(seconds: 30);
+DateTime? _startTime;
 
 // 각도 계산 함수
 double calculateAngle(List<PoseLandmark> landmarks) {
@@ -69,7 +73,9 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
               customPaint: _customPaint,
               onImage: _processImage,
               initialCameraLensDirection: _cameraLensDirection,
-              onCameraLensDirectionChanged: (value) => _cameraLensDirection = value, title: '',
+              onCameraLensDirectionChanged: (value) =>
+              _cameraLensDirection = value,
+              title: '',
             ),
           ),
         ],
@@ -77,11 +83,22 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     );
   }
 
+// 나머지 코드는 동일하게 유지하되, _processImage 함수만 변경합니다.
   Future<void> _processImage(InputImage inputImage) async {
     if (!_canProcess) return;
     if (_isBusy) return;
 
     _isBusy = true;
+
+    if (_startTime == null) {
+      _startTime = DateTime.now();
+    }
+
+    if (DateTime.now().difference(_startTime!) > _exerciseTimeLimit) {
+      _canProcess = false;
+      _text = 'Time up! Total count: $_sitStandCount';
+      return;
+    }
 
     final poses = await _poseDetector.processImage(inputImage);
     if (poses.isNotEmpty) {
@@ -93,23 +110,23 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
       );
       _customPaint = CustomPaint(painter: painter);
       final pose = poses.first;
-      final leftShoulder = pose.landmarks[PoseLandmarkType.leftShoulder]!;
-      final leftElbow = pose.landmarks[PoseLandmarkType.leftElbow]!;
-      final leftWrist = pose.landmarks[PoseLandmarkType.leftWrist]!;
+      final leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
+      final leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
+      final leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
 
-      final angle = calculateAngle([leftShoulder, leftElbow, leftWrist]);
-      if (angle < math.pi / 2 && _pushUpState == PushUpState.up) {
-        _pushUpState = PushUpState.down;
-      } else if (angle > math.pi * 0.9 && _pushUpState == PushUpState.down) {
-        _pushUpState = PushUpState.up;
-        _pushUpCount++;
+      final angle = calculateAngle([leftHip, leftKnee, leftAnkle]);
+      if (angle < math.pi / 2 && _sitStandState == SitStandState.stand) {
+        _sitStandState = SitStandState.sit;
+      } else if (angle > math.pi * 0.9 && _sitStandState == SitStandState.sit) {
+        _sitStandState = SitStandState.stand;
+        _sitStandCount++;
       }
     }
 
     _isBusy = false;
     if (mounted) {
       setState(() {
-        _text = '$_pushUpCount';
+        _text = '$_sitStandCount';
       });
     }
   }

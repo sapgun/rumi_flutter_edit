@@ -207,7 +207,7 @@ class _Myfit extends State<Myfit> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Myfit()),
+                      MaterialPageRoute(builder: (context) => PoseDetectorView()),
                     );
                   },
                   child: Text(
@@ -237,10 +237,9 @@ class _Myfit extends State<Myfit> {
                   // 여기에 측정하기 버튼이 눌렸을 때의 동작 추가
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => posedetecter()),
+                    MaterialPageRoute(builder: (context) => VideoScreen()),
                   );
                 },
-
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF1F4EF5), // 색상 코드 CEE9E3
                   minimumSize: const Size(210.0, 70.0),
@@ -262,7 +261,6 @@ class _Myfit extends State<Myfit> {
                 height: 30.0,
               ),
               // 다른 데이터를 보여줄지 여부를 저장하는 변수
-
               Container(
               width: 800,
               height: 700,
