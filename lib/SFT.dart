@@ -6,6 +6,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 import 'package:senior_fitness_app/video2.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:senior_fitness_app/posedetecter.dart';
+
+Future<List<dynamic>> fetchData() async {
+  final response = await http.get(Uri.parse('http://localhost:3000/fitness'));
+
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body);
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
 
 class Myfit extends StatefulWidget {
   const Myfit({Key? key}) : super(key: key);
@@ -16,6 +29,7 @@ class Myfit extends StatefulWidget {
 
 
 class _Myfit extends State<Myfit> {
+  Future<List<dynamic>>? futureData;
   String? name;
   String? birth;
   String? gender;
@@ -30,6 +44,7 @@ class _Myfit extends State<Myfit> {
       ..initialize().then((_) {
         setState(() {});
       });
+    futureData = fetchData();
     _loadData();
   }
 
@@ -117,6 +132,20 @@ class _Myfit extends State<Myfit> {
               SizedBox(
                 height: 30.0,
               ),
+              FutureBuilder<List<dynamic>>(
+                future: futureData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data.toString());
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                  return CircularProgressIndicator();
+                },
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -168,11 +197,34 @@ class _Myfit extends State<Myfit> {
                   SizedBox(width: 20),
                 ],
               ),
-
               SizedBox(
                 height: 30.0,
               ),
-
+              Container(
+                width: MediaQuery.of(context).size.width * 0.2,
+                height: MediaQuery.of(context).size.width * 0.1,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PoseDetectorView()),
+                    );
+                  },
+                  child: Text(
+                    '임시버튼',
+                    style: TextStyle(color: Colors.white, fontSize: 28.0),
+                  ),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color(0xFF1F4EF5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
               ElevatedButton(
                 onPressed: () {
                   if (_controller!.value.isInitialized) {
@@ -188,7 +240,6 @@ class _Myfit extends State<Myfit> {
                     MaterialPageRoute(builder: (context) => VideoScreen()),
                   );
                 },
-
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF1F4EF5), // 색상 코드 CEE9E3
                   minimumSize: const Size(210.0, 70.0),
@@ -208,8 +259,8 @@ class _Myfit extends State<Myfit> {
               ),
               SizedBox(
                 height: 30.0,
-              ), // 다른 데이터를 보여줄지 여부를 저장하는 변수
-
+              ),
+              // 다른 데이터를 보여줄지 여부를 저장하는 변수
               Container(
               width: 800,
               height: 700,

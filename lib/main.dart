@@ -7,9 +7,11 @@ import 'package:senior_fitness_app/data/my_location.dart';
 import 'package:senior_fitness_app/data/network.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+
 const apiKey = '34d28a43a906e26fedcd5528c23e32df';
 
 void main() => runApp(const MyApp());
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
