@@ -271,7 +271,21 @@ class _Myfit extends State<Myfit> {
                   children: [
                     SizedBox(
                       height: 30.0,
-                    ),
+              ),
+              // 다른 데이터를 보여줄지 여부를 저장하는 변수
+              Container(
+              width: 800,
+              height: 700,
+              decoration: BoxDecoration(
+                color: Color(0xFF83B4F9),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 30.0,
+                  ),
+
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -378,7 +392,11 @@ class _Myfit extends State<Myfit> {
             ],
         ),
       ),
-    ),
+    ],
+          ),
+        ),
+      ),
+
 
       bottomNavigationBar: BottomAppBar(
         child: Row(
