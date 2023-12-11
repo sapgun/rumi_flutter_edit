@@ -15,12 +15,9 @@ class Chatbot extends StatefulWidget {
 
 class _ChatbotState extends State<Chatbot> {
   Color backgroundColor = Colors.white;
-  Color buttonColor = Colors.lightBlueAccent;
-
+  Color buttonColor = Colors.lightBlue;
   double buttonWidth = 100;
-
   List<Widget> buttons = [];
-
   Contact? selectedContact; // 추가: 선택된 연락처를 저장할 변수
 
   @override
@@ -67,25 +64,28 @@ class _ChatbotState extends State<Chatbot> {
           ),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              buildImageWithButton(),
-              SizedBox(width: 20),
-              buildButton(contactName: 'SomeContactName'),
-            ],
-          ),
-          SizedBox(height: 20),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 20.0,
-            runSpacing: 20.0,
-            children: buttons,
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 100), // 여기에 추가
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                buildImageWithButton(),
+                SizedBox(width: 20),
+                buildButton(contactName: 'SomeContactName'),
+              ],
+            ),
+            SizedBox(height: 20),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 20.0,
+              runSpacing: 20.0,
+              children: buttons,
+            ),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomAppBar(
@@ -101,7 +101,7 @@ class _ChatbotState extends State<Chatbot> {
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(210.0, 70.0),
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Color(0xFF1F4EF5),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -139,8 +139,6 @@ class _ChatbotState extends State<Chatbot> {
   }
 
 
-
-
   Widget buildImageWithButton() {
     return ElevatedButton(
       onPressed: () async {
@@ -172,10 +170,9 @@ class _ChatbotState extends State<Chatbot> {
         shape: CircleBorder(),
         primary: buttonColor,
       ),
-      child: Icon(Icons.add, size: buttonWidth),
+      child: Icon(Icons.add, size: buttonWidth, color: Colors.white),
     );
   }
-
 
 
   Future<Contact?> _selectContact() async {
@@ -209,38 +206,93 @@ class _ChatbotState extends State<Chatbot> {
   Widget buildContactButton(Contact contact, String? contactName) {
     String displayName = contact.displayName ?? contactName ?? 'Unknown';
 
-    // 원래 + 버튼의 스타일을 가져와서 새로운 버튼에 적용
     ButtonStyle originalButtonStyle = ElevatedButton.styleFrom(
       padding: EdgeInsets.all(20),
       shape: CircleBorder(),
       primary: buttonColor,
     );
 
-    return ElevatedButton(
-      onPressed: () {
-        print('Selected Contact: $displayName');
-        String phoneNumber = contact.phones?.isNotEmpty ?? false
-            ? contact.phones!.first.value!
-            : '';
-        _makePhoneCall(phoneNumber);
-      },
-      style: originalButtonStyle.merge(
-        ButtonStyle(
-          fixedSize: MaterialStateProperty.all(
-            Size(140, 140),
+    return Stack(
+      alignment: Alignment.topRight,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            print('선택된 연락처: $displayName');
+            String phoneNumber = contact.phones?.isNotEmpty ?? false
+                ? contact.phones!.first.value!
+                : '';
+            _makePhoneCall(phoneNumber);
+          },
+          style: originalButtonStyle.merge(
+            ButtonStyle(
+              fixedSize: MaterialStateProperty.all(
+                Size(140, 140),
+              ),
+            ),
+          ),
+          child: Text(
+            displayName,
+            style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
-      ),
-      child: Text(
-        displayName,
-        style: TextStyle(fontSize: 20),
-      ),
+        IconButton(
+          onPressed: () {
+            _removeButton(contact);
+          },
+          icon: Icon(Icons.delete),
+          color: Colors.red,
+        ),
+      ],
     );
   }
 
+  void _removeButton(Contact contact) {
+    String displayName = contact.displayName ?? 'Unknown';
 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('삭제 확인'),
+          content: Text('연락처 "$displayName"를 삭제하시겠습니까?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 다이얼로그 닫기
 
+                setState(() {
+                  buttons.removeWhere((widget) {
+                    if (widget is Stack &&
+                        widget.children.isNotEmpty &&
+                        widget.children[0] is ElevatedButton) {
+                      ElevatedButton elevatedButton = widget.children[0] as ElevatedButton;
+                      Widget? child = elevatedButton.child;
 
+                      if (child != null && child is Text) {
+                        String buttonLabel = child.data ?? '';
+                        return buttonLabel == displayName;
+                      }
+                    }
+                    return false;
+                  });
+
+                });
+
+                print('After UI deletion: $buttons');
+              },
+              child: Text('확인'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 다이얼로그 닫기
+              },
+              child: Text('취소'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void _makePhoneCall(String phoneNumber) async {
     if (await canLaunch('tel:$phoneNumber')) {
