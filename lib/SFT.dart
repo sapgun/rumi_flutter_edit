@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:senior_fitness_app/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
@@ -9,9 +8,10 @@ import 'package:senior_fitness_app/video2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:senior_fitness_app/posedetecter.dart';
+import 'package:senior_fitness_app/loading.dart';
 
 Future<List<dynamic>> fetchData() async {
-  final response = await http.get(Uri.parse('http://localhost:3000/fitness'));
+  final response = await http.get(Uri.parse('http://localhost:3000/'));  /*ngrok으로 주소 변경해야함*/
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
@@ -151,7 +151,7 @@ class _Myfit extends State<Myfit> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 70,
+                    width: MediaQuery.of(context).size.width * 0.175, // 70 대신에 사용
                     height: 50,
                     color: Color(0xFF1F4EF5), // 'CEE9E3' 색상
                     child: Center(
@@ -165,7 +165,7 @@ class _Myfit extends State<Myfit> {
                     ),
                   ),
                   Container(
-                    width: 70,
+                    width: MediaQuery.of(context).size.width * 0.175, // 70 대신에 사용
                     height: 50,
                     color: Colors.white,
                     child: Center(
@@ -173,7 +173,7 @@ class _Myfit extends State<Myfit> {
                     ),
                   ),
                   Container(
-                    width: 100,
+                    width: MediaQuery.of(context).size.width * 0.25, // 100 대신에 사용
                     height: 50,
                     color: Color(0xFF1F4EF5), // 'CEE9E3' 색상
                     child: Center(
@@ -187,14 +187,13 @@ class _Myfit extends State<Myfit> {
                     ),
                   ),
                   Container(
-                    width: 110,
+                    width: MediaQuery.of(context).size.width * 0.275, // 110 대신에 사용
                     height: 50,
                     color: Colors.white,
                     child: Center(
                       child: Text('80', style: TextStyle(fontSize: 20)),
                     ),
                   ),
-                  SizedBox(width: 20),
                 ],
               ),
               SizedBox(
@@ -262,111 +261,121 @@ class _Myfit extends State<Myfit> {
               ),
               // 다른 데이터를 보여줄지 여부를 저장하는 변수
               Container(
-              width: 800,
-              height: 700,
-              decoration: BoxDecoration(
-                color: Color(0xFF83B4F9),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            child: Text(
-                              showOtherData ? '30초간 앉았다 일어서기 [하체 근력]':'30초간 아령 들기 [상체근력]',
-                          style: TextStyle(
-                            letterSpacing: 2.0,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        ),
-                        SizedBox(
-                          width: 30.0,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              showOtherData = !showOtherData; // 버튼 클릭 시 다른 데이터를 보여줄지 여부를 변경
-                            });
-                          },
-                          child: Text(
-                            '→',
-                          ),
-                        ),
-                      ],
+                width: MediaQuery.of(context).size.width * 0.8, // 800 대신에 사용
+                height: MediaQuery.of(context).size.height * 0.7, // 700 대신에 사용
+                decoration: BoxDecoration(
+                  color: Color(0xFF83B4F9),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30.0,
                     ),
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Container(
-                    width: 300.0, // 조절하고자 하는 너비
-                    height: 200.0, // 조절하고자 하는 높이
-                    child: showOtherData
-                        ? Container(
-                      // 다른 데이터 보여주는 위젯 구현
-                    )
-                        : LineChart(
-                      LineChartData(
-                        backgroundColor: Color(0xFFFFFDFD),
-                        gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(show: false),
-                        borderData: FlBorderData(
-                          show: true,
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1,
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible( // 추가된 부분
+                            child: Container(
+                              child: Text(
+                                showOtherData ? '30초간 앉았다 일어서기\n[하체 근력]' : '30초간 아령 들기\n[상체근력]',
+                                style: TextStyle(
+                                  letterSpacing: 2.0,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        minX: 0,
-                        maxX: 7,
-                        minY: 0,
-                        maxY: 100,
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: [
-                              FlSpot(0, 30),
-                              FlSpot(1, 40),
-                              FlSpot(2, 20),
-                              FlSpot(3, 60),
-                              FlSpot(4, 50),
-                              FlSpot(5, 70),
-                              FlSpot(6, 70),
-                              FlSpot(7, 90),
-                            ],
-                            isCurved: true,
-                            dotData: FlDotData(show: false),
-                            belowBarData: BarAreaData(show: false),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                showOtherData = !showOtherData; // 버튼 클릭 시 다른 데이터를 보여줄지 여부를 변경
+                              });
+                            },
+                            child: Text(
+                              '→',
+                              style: TextStyle( // 텍스트 스타일 설정
+                                color: Colors.black, // 텍스트 색상을 검정색으로 설정
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 8, vertical: 5)), // 패딩 조정
+                              minimumSize: MaterialStateProperty.all(Size(30, 30)),
+                              backgroundColor: MaterialStateProperty.all(Colors.white),// 최소 크기 설정
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Container(
-                    width: 300.0, // 조절하고자 하는 너비
-                    height: 200.0, // 조절하고자 하는 높이
-                    child: showOtherData
-                        ? Container(
-                      // 다른 데이터 보여주는 위젯 구현
-                    )
-                    : YoutubePlayer(
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.3, // 300 대신에 사용
+                      height: MediaQuery.of(context).size.height * 0.2, // 200 대신에 사용
+                      child: showOtherData
+                          ? Container(
+                        // 다른 데이터 보여주는 위젯 구현
+                      )
+                          : LineChart(
+                        LineChartData(
+                          backgroundColor: Color(0xFFFFFDFD),
+                          gridData: FlGridData(show: false),
+                          titlesData: FlTitlesData(show: false),
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1,
+                            ),
+                          ),
+                          minX: 0,
+                          maxX: 7,
+                          minY: 0,
+                          maxY: 100,
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: [
+                                FlSpot(0, 30),
+                                FlSpot(1, 40),
+                                FlSpot(2, 20),
+                                FlSpot(3, 60),
+                                FlSpot(4, 50),
+                                FlSpot(5, 70),
+                                FlSpot(6, 70),
+                                FlSpot(7, 90),
+                              ],
+                              isCurved: true,
+                              dotData: FlDotData(show: false),
+                              belowBarData: BarAreaData(show: false),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.3, // 300 대신에 사용
+                      height: MediaQuery.of(context).size.height * 0.2, // 200 대신에 사용
+                      child: showOtherData
+                          ? Container(
+                        // 다른 데이터 보여주는 위젯 구현
+                      )
+                          : YoutubePlayer(
                         controller: _con,
+                      ),
                     ),
-                    ),
-              ],
-            ),
-          ),
-         ],
+                  ],
+                ),
+              ),
+            ],
         ),
       ),
     ),
@@ -379,7 +388,7 @@ class _Myfit extends State<Myfit> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MyHomePage()),
+                    MaterialPageRoute(builder: (context) => Loading()),
                   );
                   // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
                 },
