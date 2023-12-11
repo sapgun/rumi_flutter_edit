@@ -22,7 +22,7 @@ class _rumi_chatState extends State<rumi_chat> {
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
-            '루미 - chatpage',
+            '루미',
             style: TextStyle(
               letterSpacing: 2.0,
               fontSize: 35.0,
@@ -47,7 +47,7 @@ class _rumi_chatState extends State<rumi_chat> {
                 },
                 style: TextButton.styleFrom(
                   minimumSize: const Size(210.0, 70.0),
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Color(0xFF1F4EF5),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
