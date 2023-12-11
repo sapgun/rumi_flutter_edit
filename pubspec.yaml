@@ -43,6 +43,7 @@ dependencies:
   flutter_svg: ^2.0.9
   timer_builder: ^2.0.0
   intl: ^0.18.1
+  avatar_glow: ^2.0.2
   flutter_localizations:
     sdk: flutter
 

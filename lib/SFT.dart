@@ -201,7 +201,11 @@ class _Myfit extends State<Myfit> {
                 height: 30.0,
               ),
               Container(
+<<<<<<< HEAD
                 width: MediaQuery.of(context).size.width * 0.2,
+=======
+                width: MediaQuery.of(context).size.width * 0.6,
+>>>>>>> b1f6867815468945e32ba6614fd599a5e0fb7854
                 height: MediaQuery.of(context).size.width * 0.1,
                 child: TextButton(
                   onPressed: () {
@@ -282,7 +286,7 @@ class _Myfit extends State<Myfit> {
                               showOtherData ? '30초간 앉았다 일어서기 [하체 근력]':'30초간 아령 들기 [상체근력]',
                           style: TextStyle(
                             letterSpacing: 2.0,
-                            fontSize: 24.0,
+                            fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

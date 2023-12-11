@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:senior_fitness_app/birth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 class Name extends StatefulWidget {
   const Name({Key? key}) : super(key: key);
@@ -11,9 +12,11 @@ class Name extends StatefulWidget {
 }
 
 class _NameState extends State<Name> {
+  var text = "";
+  var isListening = false;
+  SpeechToText speechToText = SpeechToText();
   TextEditingController controller1 = TextEditingController();
-  stt.SpeechToText speech = stt.SpeechToText();
-  bool isListening = false;
+  SpeechToText speech = SpeechToText();
 
   @override
   Widget build(BuildContext context) {
@@ -61,34 +64,65 @@ class _NameState extends State<Name> {
                           ),
                         ),
                         keyboardType: TextInputType.name,
+                        onChanged: (value) {
+                          setState(() {
+                            controller1.text = text;
+                          });
+                        },
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 300.0),
             Text(
               "눌러서 말하기",
               style: TextStyle(
                 fontSize: 20.0,
               ),
             ),
-            const SizedBox(height: 10.0),
-            ElevatedButton(
-              onPressed: toggleListening,
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(150.0, 150.0),
-                backgroundColor: Color(0xFF1F4EF5),
-                shape: CircleBorder(),
-              ),
-              child: Icon(
-                isListening ? Icons.mic : Icons.mic_off,
-                color: Colors.white,
-                size: 60.0,
-              ),
-            ),
           ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+
+      floatingActionButton: AvatarGlow(
+        endRadius: 125.0,
+        animate: isListening,
+        duration: Duration(milliseconds: 2000),
+        glowColor: Color(0xFF1F4EF5),
+        repeat: true,
+        repeatPauseDuration: Duration(milliseconds: 100),
+        showTwoGlows: true,
+        child: GestureDetector(
+          onTapDown: (details) async{
+            if (!isListening) {
+              var available = await speechToText.initialize();
+              if (available) {
+                setState(() {
+                  isListening = true;
+                  speechToText.listen(
+                    onResult: (result) {
+                      setState(() {
+                        text = result.recognizedWords;
+                      });
+                    }
+                  );
+                });
+              }
+            }
+          },
+          onTapUp: (details) {
+            setState(() {
+              isListening = false;
+            });
+            speechToText.stop();
+          },
+          child: CircleAvatar(
+            backgroundColor: Color(0xFF1F4EF5),
+            radius: 100.0,
+            child: Icon(isListening ? Icons.mic : Icons.mic_none, color: Colors.white, size: 75.0,),
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -127,39 +161,5 @@ class _NameState extends State<Name> {
         ),
       ),
     );
-  }
-
-  void toggleListening() {
-    if (!isListening) {
-      startListening();
-    } else {
-      stopListening();
-    }
-  }
-
-  void startListening() {
-    if (!speech.isListening) {
-      speech.listen(
-        onResult: (result) {
-          if (result.finalResult) {
-            setState(() {
-              controller1.text = result.recognizedWords;
-            });
-          }
-        },
-      );
-      setState(() {
-        isListening = true;
-      });
-    }
-  }
-
-  void stopListening() {
-    if (speech.isListening) {
-      speech.stop();
-      setState(() {
-        isListening = false;
-      });
-    }
   }
 }
