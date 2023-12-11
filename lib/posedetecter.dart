@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:mysql1/mysql1.dart';
 
 import 'detector_view.dart';
 import 'painters/pose_painter.dart';
@@ -97,6 +98,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     if (DateTime.now().difference(_startTime!) > _exerciseTimeLimit) {
       _canProcess = false;
       _text = 'Time up! Total count: $_sitStandCount';
+      _saveSitStandCountToDatabase(_sitStandCount);
       return;
     }
 
@@ -128,6 +130,25 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
       setState(() {
         _text = '$_sitStandCount';
       });
+    }
+  }
+  void _saveSitStandCountToDatabase(int count) async {
+    final conn = await MySqlConnection.connect(ConnectionSettings(
+      host: 'localhost',
+      port: 3306,
+      user: 'root',
+      password: '0000',
+      db: 'rumi',
+    ));
+
+    try {
+      final query = 'INSERT INTO fitness (sit_count) VALUES (?)';
+      final result = await conn.query(query, [count]);
+      print('Data inserted successfully. Insert ID: ${result.insertId}');
+    } catch (e) {
+      print('Error occurred while inserting data: $e');
+    } finally {
+      await conn.close();
     }
   }
 }
