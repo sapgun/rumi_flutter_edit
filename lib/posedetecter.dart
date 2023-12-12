@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:mysql1/mysql1.dart';
 
 import 'detector_view.dart';
 import 'painters/pose_painter.dart';
@@ -97,37 +98,60 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     if (DateTime.now().difference(_startTime!) > _exerciseTimeLimit) {
       _canProcess = false;
       _text = 'Time up! Total count: $_sitStandCount';
-      return;
+      _saveSitStandCountToDatabase(_sitStandCount);
+
+    return;
     }
 
     final poses = await _poseDetector.processImage(inputImage);
     if (poses.isNotEmpty) {
-      final painter = PosePainter(
-        poses,
-        inputImage.metadata!.size,
-        inputImage.metadata!.rotation,
-        _cameraLensDirection,
-      );
-      _customPaint = CustomPaint(painter: painter);
-      final pose = poses.first;
-      final leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
-      final leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
-      final leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
+    final painter = PosePainter(
+    poses,
+    inputImage.metadata!.size,
+    inputImage.metadata!.rotation,
+    _cameraLensDirection,
+    );
+    _customPaint = CustomPaint(painter: painter);
+    final pose = poses.first;
+    final leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
+    final leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
+    final leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
 
-      final angle = calculateAngle([leftHip, leftKnee, leftAnkle]);
-      if (angle < math.pi / 2 && _sitStandState == SitStandState.stand) {
-        _sitStandState = SitStandState.sit;
-      } else if (angle > math.pi * 0.9 && _sitStandState == SitStandState.sit) {
-        _sitStandState = SitStandState.stand;
-        _sitStandCount++;
-      }
+    final angle = calculateAngle([leftHip, leftKnee, leftAnkle]);
+    if (angle < math.pi / 2 && _sitStandState == SitStandState.stand) {
+    _sitStandState = SitStandState.sit;
+    } else if (angle > math.pi * 0.9 && _sitStandState == SitStandState.sit) {
+    _sitStandState = SitStandState.stand;
+    _sitStandCount++;
+    }
     }
 
     _isBusy = false;
     if (mounted) {
-      setState(() {
-        _text = '$_sitStandCount';
-      });
+    setState(() {
+    _text = '$_sitStandCount';
+    });
+    }
+  }
+
+  void _saveSitStandCountToDatabase(int count) async {
+    final conn = await MySqlConnection.connect(ConnectionSettings(
+      host: 'localhost',
+      port: 3306,
+      user: 'root',
+      password: '0000',
+      db: 'rumi',
+    ));
+
+    try {
+      final query = 'INSERT INTO fitness (sit_count) VALUES (?)';
+      final result = await conn.query(query, [count]);
+      print('Data inserted successfully. Insert ID: ${result.insertId}');
+    } catch (e) {
+      print('Error occurred while inserting data: $e');
+    } finally {
+      await conn.close();
     }
   }
 }
+
