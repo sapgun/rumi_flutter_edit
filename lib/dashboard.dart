@@ -47,7 +47,7 @@ class _DashboardState extends State<Dashboard> {
     double temp2 = weatherData['main']['temp'].toDouble();
     int condition = weatherData['weather'][0]['id'];
     int index = airData['list'][0]['main']['aqi'];
-    des = weatherData['weather'][0]['description'];
+    des = model.weatherDescKo[weatherData['weather'][0]['id']];
     temp = temp2.round();
     cityName = model.getKrCityName(weatherData['name']);
     icon = model.getWeatherIcon(condition);
