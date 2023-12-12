@@ -11,7 +11,7 @@ import 'package:senior_fitness_app/posedetecter.dart';
 import 'package:senior_fitness_app/loading.dart';
 
 Future<List<dynamic>> fetchData() async {
-  final response = await http.get(Uri.parse('http://localhost:3000/'));  /*ngrok으로 주소 변경해야함*/
+  final response = await http.get(Uri.parse('https://be80-175-214-183-100.ngrok.io'));  /*ngrok으로 주소 변경해야함*/
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
@@ -271,21 +271,7 @@ class _Myfit extends State<Myfit> {
                   children: [
                     SizedBox(
                       height: 30.0,
-              ),
-              // 다른 데이터를 보여줄지 여부를 저장하는 변수
-              Container(
-              width: 800,
-              height: 700,
-              decoration: BoxDecoration(
-                color: Color(0xFF83B4F9),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 30.0,
-                  ),
-
+                    ),
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -387,9 +373,7 @@ class _Myfit extends State<Myfit> {
                       ),
                     ),
                   ],
-                ),
-              ),
-            ],
+
         ),
       ),
     ],
