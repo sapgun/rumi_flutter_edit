@@ -100,37 +100,37 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
       _text = 'Time up! Total count: $_sitStandCount';
       _saveSitStandCountToDatabase(_sitStandCount);
 
-    return;
+      return;
     }
 
     final poses = await _poseDetector.processImage(inputImage);
     if (poses.isNotEmpty) {
-    final painter = PosePainter(
-    poses,
-    inputImage.metadata!.size,
-    inputImage.metadata!.rotation,
-    _cameraLensDirection,
-    );
-    _customPaint = CustomPaint(painter: painter);
-    final pose = poses.first;
-    final leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
-    final leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
-    final leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
+      final painter = PosePainter(
+        poses,
+        inputImage.metadata!.size,
+        inputImage.metadata!.rotation,
+        _cameraLensDirection,
+      );
+      _customPaint = CustomPaint(painter: painter);
+      final pose = poses.first;
+      final leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
+      final leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
+      final leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
 
-    final angle = calculateAngle([leftHip, leftKnee, leftAnkle]);
-    if (angle < math.pi / 2 && _sitStandState == SitStandState.stand) {
-    _sitStandState = SitStandState.sit;
-    } else if (angle > math.pi * 0.9 && _sitStandState == SitStandState.sit) {
-    _sitStandState = SitStandState.stand;
-    _sitStandCount++;
-    }
+      final angle = calculateAngle([leftHip, leftKnee, leftAnkle]);
+      if (angle < math.pi / 2 && _sitStandState == SitStandState.stand) {
+        _sitStandState = SitStandState.sit;
+      } else if (angle > math.pi * 0.9 && _sitStandState == SitStandState.sit) {
+        _sitStandState = SitStandState.stand;
+        _sitStandCount++;
+      }
     }
 
     _isBusy = false;
     if (mounted) {
-    setState(() {
-    _text = '$_sitStandCount';
-    });
+      setState(() {
+        _text = '$_sitStandCount';
+      });
     }
   }
 
@@ -154,4 +154,3 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     }
   }
 }
-

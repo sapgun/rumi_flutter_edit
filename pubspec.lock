@@ -515,7 +515,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-<<<<<<< HEAD
   mysql1:
     dependency: "direct main"
     description:
@@ -524,8 +523,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.20.0"
-=======
->>>>>>> 0ca646c765420c493b024abb3872b232481e28e0
   path:
     dependency: "direct main"
     description:
