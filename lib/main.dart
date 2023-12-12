@@ -6,7 +6,7 @@ import 'package:senior_fitness_app/dashboard.dart';
 import 'package:senior_fitness_app/data/my_location.dart';
 import 'package:senior_fitness_app/data/network.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'package:flutter/services.dart';
 
 const apiKey = '34d28a43a906e26fedcd5528c23e32df';
 
@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

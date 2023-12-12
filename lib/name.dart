@@ -71,17 +71,16 @@ class _NameState extends State<Name> {
                 ),
               ),
             ),
-            Text(
-              "눌러서 말하기",
-              style: TextStyle(
-                fontSize: 20.0,
-              ),
-            ),
+            // Text(
+            //   "눌러서 말하기",
+            //   style: TextStyle(
+            //     fontSize: 20.0,
+            //   ),
+            // ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-
       floatingActionButton: AvatarGlow(
         endRadius: 125.0,
         animate: isListening,
