@@ -3,10 +3,11 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-import 'package:mysql1/mysql1.dart';
 
 import 'detector_view.dart';
 import 'painters/pose_painter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // 의자에서 앉았다 일어나기 상태
 enum SitStandState {
@@ -49,6 +50,20 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   CustomPaint? _customPaint;
   String? _text;
   var _cameraLensDirection = CameraLensDirection.back;
+
+  Future<http.Response> sendPostRequest(int totalCount, int sitCount) async {
+    final uri = Uri.parse('https://a296-175-214-183-100.ngrok.io');
+    final headers = {'Content-Type': 'application/json'};
+    final body = json.encode({
+      'totalCount': totalCount,
+      'sitCount': sitCount,
+    });
+
+    final response = await http.post(uri, headers: headers, body: body);
+
+    return response;
+  }
+
 
   @override
   void dispose() async {
@@ -98,7 +113,14 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     if (DateTime.now().difference(_startTime!) > _exerciseTimeLimit) {
       _canProcess = false;
       _text = 'Time up! Total count: $_sitStandCount';
-      _saveSitStandCountToDatabase(_sitStandCount);
+
+      // 운동 시간이 끝나면 결과를 서버에 보내는 코드를 추가합니다.
+      final response = await sendPostRequest(_sitStandCount, _sitStandState == SitStandState.sit ? 1 : 0);
+      if (response.statusCode == 200) {
+        print('Data sent successfully');
+      } else {
+        print('Failed to send data');
+      }
 
       return;
     }
@@ -131,26 +153,6 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
       setState(() {
         _text = '$_sitStandCount';
       });
-    }
-  }
-
-  void _saveSitStandCountToDatabase(int count) async {
-    final conn = await MySqlConnection.connect(ConnectionSettings(
-      host: 'localhost',
-      port: 3306,
-      user: 'root',
-      password: '0000',
-      db: 'rumi',
-    ));
-
-    try {
-      final query = 'INSERT INTO fitness (sit_count) VALUES (?)';
-      final result = await conn.query(query, [count]);
-      print('Data inserted successfully. Insert ID: ${result.insertId}');
-    } catch (e) {
-      print('Error occurred while inserting data: $e');
-    } finally {
-      await conn.close();
     }
   }
 }

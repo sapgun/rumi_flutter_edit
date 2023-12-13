@@ -11,7 +11,7 @@ import 'package:senior_fitness_app/posedetecter.dart';
 import 'package:senior_fitness_app/loading.dart';
 
 Future<List<dynamic>> fetchData() async {
-  final response = await http.get(Uri.parse('https://be80-175-214-183-100.ngrok.io'));  /*ngrok으로 주소 변경해야함*/
+  final response = await http.get(Uri.parse('https://a296-175-214-183-100.ngrok.io'));  /*ngrok으로 주소 변경해야함*/
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
