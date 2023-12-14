@@ -12,7 +12,8 @@ import 'package:senior_fitness_app/loading.dart';
 import 'model/wid.dart';
 
 Future<List<dynamic>> fetchData() async {
-  final response = await http.get(Uri.parse('https://a296-175-214-183-100.ngrok.io'));  /*ngrok으로 주소 변경해야함*/
+  final response = await http.get(
+      Uri.parse('https://a296-175-214-183-100.ngrok.io')); /*ngrok으로 주소 변경해야함*/
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
@@ -78,7 +79,7 @@ class _Myfit extends State<Myfit> {
     return age;
   }
 
-  static String youtubeId = 'AdYRASHRKwE';
+  static String youtubeId = 'U_Tv31zKYkk';
 
   final YoutubePlayerController _con = YoutubePlayerController(
     initialVideoId: youtubeId,
@@ -259,7 +260,7 @@ class _Myfit extends State<Myfit> {
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.8, // 800 대신에 사용
-              height: MediaQuery.of(context).size.height * 0.7, // 700 대신에 사용
+              height: MediaQuery.of(context).size.height * 0.6, // 700 대신에 사용
               decoration: BoxDecoration(
                 color: Color(0xFF83B4F9),
                 borderRadius: BorderRadius.circular(10),
@@ -273,6 +274,7 @@ class _Myfit extends State<Myfit> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        SizedBox(),
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -280,6 +282,7 @@ class _Myfit extends State<Myfit> {
                                 _selectedIndex = 6;
                               } else {
                                 _selectedIndex = _selectedIndex - 1;
+                                // youtubeId = pagef.getyoutubeId(_selectedIndex)!;
                               }
                             });
                           },
@@ -305,6 +308,7 @@ class _Myfit extends State<Myfit> {
                                 _selectedIndex = 1;
                               } else {
                                 _selectedIndex = _selectedIndex + 1;
+                                // youtubeId = pagef.getyoutubeId(_selectedIndex)!;
                               }
                             });
                           },
@@ -319,6 +323,7 @@ class _Myfit extends State<Myfit> {
                                 Colors.white), // 최소 크기 설정
                           ),
                         ),
+                        SizedBox(),
                       ],
                     ),
                   ),
@@ -326,10 +331,8 @@ class _Myfit extends State<Myfit> {
                     height: 30.0,
                   ),
                   Container(
-                    width:
-                        MediaQuery.of(context).size.width * 0.6,
-                    height:
-                        MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.2,
                     child: LineChart(
                       LineChartData(
                         backgroundColor: Color(0xFFFFFDFD),
@@ -361,12 +364,21 @@ class _Myfit extends State<Myfit> {
                     height: 30.0,
                   ),
                   Container(
-                    width:
-                        MediaQuery.of(context).size.width * 0.6,
-                    height:
-                        MediaQuery.of(context).size.height * 0.2,
-                    child: YoutubePlayer(
-                      controller: _con,
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: Column(
+                      children: [
+                        Text(
+                          '오늘의 추천 운동',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        YoutubePlayer(
+                          controller: _con,
+                        ),
+                      ],
                     ),
                   ),
                 ],
