@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:senior_fitness_app/chatbot.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class rumi_chat extends StatefulWidget {
   const rumi_chat({super.key});
@@ -9,6 +12,7 @@ class rumi_chat extends StatefulWidget {
 }
 
 class _rumi_chatState extends State<rumi_chat> {
+  FlutterTts flutterTts = FlutterTts();
   final List<ChatMessage> messages = []; // 채팅 메시지를 저장할 목록
   final TextEditingController _controller = TextEditingController();
 
@@ -114,24 +118,43 @@ class _rumi_chatState extends State<rumi_chat> {
     _controller.clear();
   }
 
-  void sendToServer(String userMessage) {
-    // 사용자 메시지를 Flask 서버로 보내고 응답을 처리하는 로직을 구현
-    // 실제로는 HTTP 요청 등을 사용할 것입니다.
+  Future<void> sendToServer(String userMessage) async {
+    final url = Uri.parse('https://5baf-175-214-183-100.ngrok.io');
 
-    String chatbotResponse = getChatbotResponse(userMessage);
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'userMessage': userMessage}),
+      );
 
-    setState(() {
-      messages.add(ChatMessage(chatbotResponse, false));
-    });
+      print('서버 응답 데이터: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        String chatbotResponse = data['generated_text'] ?? '';
+
+        // 추가: 채팅 메시지 출력 여부 확인
+        print('챗봇 응답: $chatbotResponse');
+
+        if (chatbotResponse.isNotEmpty) {
+          setState(() {
+            messages.add(ChatMessage(chatbotResponse, false));
+          });
+          await flutterTts.speak(chatbotResponse);
+        } else {
+          print('챗봇 응답이 비어있습니다.');
+        }
+      } else {
+        print('서버 응답 오류: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('서버 통신 중 오류 발생: $e');
+    }
   }
 
-  String getChatbotResponse(String userMessage) {
-    // 사용자 메시지를 Flask 서버로 전송하고 챗봇 응답을 받는 로직을 구현
-    // 실제로는 HTTP 요청 등을 사용할 것입니다.
 
-    // 간단함을 위해 현재는 정적인 응답을 반환
-    return "루미: 받은 메시지: '$userMessage'";
-  }
+
 
 }
 
