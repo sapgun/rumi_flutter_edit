@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:senior_fitness_app/chatbot.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class rumi_chat extends StatefulWidget {
   const rumi_chat({super.key});
@@ -11,6 +12,7 @@ class rumi_chat extends StatefulWidget {
 }
 
 class _rumi_chatState extends State<rumi_chat> {
+  FlutterTts flutterTts = FlutterTts();
   final List<ChatMessage> messages = []; // 채팅 메시지를 저장할 목록
   final TextEditingController _controller = TextEditingController();
 
@@ -117,7 +119,7 @@ class _rumi_chatState extends State<rumi_chat> {
   }
 
   Future<void> sendToServer(String userMessage) async {
-    final url = Uri.parse('https://b2a2-175-214-183-100.ngrok.io');
+    final url = Uri.parse('https://5baf-175-214-183-100.ngrok.io');
 
     try {
       final response = await http.post(
@@ -139,6 +141,7 @@ class _rumi_chatState extends State<rumi_chat> {
           setState(() {
             messages.add(ChatMessage(chatbotResponse, false));
           });
+          await flutterTts.speak(chatbotResponse);
         } else {
           print('챗봇 응답이 비어있습니다.');
         }
