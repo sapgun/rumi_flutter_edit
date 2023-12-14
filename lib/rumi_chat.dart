@@ -42,13 +42,9 @@ class _rumi_chatState extends State<rumi_chat> {
             child: ListView.builder(
               itemCount: messages.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    messages[index].content,
-                    style: TextStyle(
-                      color: messages[index].isUser ? Colors.blue : Colors.green,
-                    ),
-                  ),
+                return Bubble(
+                  message: messages[index].content,
+                  isUser: messages[index].isUser,
                 );
               },
             ),
@@ -144,4 +140,32 @@ class ChatMessage {
   final bool isUser;
 
   ChatMessage(this.content, this.isUser);
+}
+
+class Bubble extends StatelessWidget {
+  final String message;
+  final bool isUser;
+
+  const Bubble({required this.message, required this.isUser});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Align(
+        alignment: isUser ? Alignment.topRight : Alignment.topLeft,
+        child: Container(
+          decoration: BoxDecoration(
+            color: isUser ? Colors.blue : Colors.green,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Text(
+            message,
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
 }
