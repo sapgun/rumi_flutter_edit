@@ -10,6 +10,8 @@ import 'dart:convert';
 import 'package:senior_fitness_app/posedetecter.dart';
 import 'package:senior_fitness_app/loading.dart';
 import 'model/wid.dart';
+import 'posedetecter1.dart';
+
 
 Future<List<dynamic>> fetchData() async {
   final response = await http.get(
