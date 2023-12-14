@@ -51,26 +51,40 @@ class _Myfit extends State<Myfit> {
     final response = await http.get(
       Uri.parse('http://localhost:3000/'),
     );
-    print('Status code: ${response.statusCode}');
-    print('Body: ${response.body}');
+    print('상태 코드: ${response.statusCode}');
+    print('본문: ${response.body}');
 
     if (response.statusCode == 200) {
       List<dynamic> result = jsonDecode(response.body)['data'];
       List<Map<String, dynamic>> data = result.map((item) {
         DateTime date = DateFormat('yyyy-MM-dd').parse(item['workout_date']);
-        double count = double.parse(item['dumbbell_count'].toString());
-        return {'date': date, 'count': count};
+        double dumbbellCount = double.parse(item['dumbbell_count'].toString());
+        double sitCount = double.parse(item['sit_count'].toString());
+        double backCount = double.parse(item['back_count'].toString());
+        double handCount = double.parse(item['hand_count'].toString());
+        double stepCount = double.parse(item['step_count'].toString());
+        double obstacleCount = double.parse(item['obstacle_count'].toString());
+
+        return {
+          'date': date,
+          'dumbbellCount': dumbbellCount,
+          'sitCount': sitCount,
+          'backCount': backCount,
+          'handCount': handCount,
+          'stepCount': stepCount,
+          'obstacleCount': obstacleCount,
+        };
       }).toList();
 
-      // Sort the data by date
+      // 날짜로 데이터 정렬
       data.sort((a, b) => a['date'].compareTo(b['date']));
 
       setState(() {
-        // Select the last 5 items in the sorted list
+        // 정렬된 목록에서 마지막 5개 항목 선택
         this.data = data.length > 5 ? data.sublist(data.length - 5) : data;
       });
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('데이터 로드 실패');
     }
   }
 
@@ -117,6 +131,7 @@ class _Myfit extends State<Myfit> {
   bool showOtherData = false;
   int _selectedIndex = 1;
   PageF pagef = PageF();
+
 
   @override
   Widget build(BuildContext context) {
@@ -372,8 +387,8 @@ class _Myfit extends State<Myfit> {
                           ),
                           minX: data.first['date'].month.toDouble(),
                           maxX: data.last['date'].month.toDouble(),
-                          minY: 8,
-                          maxY: 15,
+                          minY: pagef.calculateMinY(_selectedIndex),
+                          maxY: pagef.calculateMaxY(_selectedIndex),
                           lineBarsData: [
                             LineChartBarData(
                               spots: pagef.getData(data, _selectedIndex),

@@ -69,77 +69,76 @@ class PageF {
       );
     }
   }
+  double calculateMinY(int index) {
+    switch (index) {
+      case 1:
+        return 5;
+      case 2:
+        return 0;
+      case 3:
+        return 40;
+      case 4:
+        return -17;
+      case 5:
+        return -27;
+      case 6:
+        return 4;
+      default:
+        return 0; // Default value, modify as needed
+    }
+  }
+
+  double calculateMaxY(int index) {
+    switch (index) {
+      case 1:
+        return 25;
+      case 2:
+        return 20;
+      case 3:
+        return 120;
+      case 4:
+        return 15;
+      case 5:
+        return 4;
+      case 6:
+        return 10;
+      default:
+        return 100; // Default value, modify as needed
+    }
+  }
+
 
   List<FlSpot> getData(List<Map<String, dynamic>> data, int index) {
-    if (index == 1) {
+    if (index >= 1 && index <= 6) {
       return data
           .take(maxDataToShow)
-          .map((item) =>
-          FlSpot(
-            item['date'].month.toDouble(),
-            item['count'],
-          ))
+          .map((item) {
+        double value;
+        switch (index) {
+          case 1:
+            value = item['dumbbellCount'] as double? ?? 0.0;
+            break;
+          case 2:
+            value = item['sitCount'] as double? ?? 0.0;
+            break;
+          case 3:
+            value = item['stepCount'] as double? ?? 0.0;
+            break;
+          case 4:
+            value = item['handCount'] as double? ?? 0.0;
+            break;
+          case 5:
+            value = item['backCount'] as double? ?? 0.0;
+            break;
+          case 6:
+            value = item['obstacleCount'] as double? ?? 0.0;
+            break;
+          default:
+            value = 0.0;
+        }
+        return FlSpot(item['date'].month.toDouble(), value);
+      })
           .toList();
-    }
-    else if (index == 2) {
-      return [
-        FlSpot(0, 80),
-        FlSpot(1, 20),
-        FlSpot(2, 30),
-        FlSpot(3, 40),
-        FlSpot(4, 10),
-        FlSpot(5, 90),
-        FlSpot(6, 80),
-        FlSpot(7, 70),
-      ];
-    }
-    else if (index == 3) {
-      return [
-        FlSpot(0, 30),
-        FlSpot(1, 10),
-        FlSpot(2, 50),
-        FlSpot(3, 40),
-        FlSpot(4, 60),
-        FlSpot(5, 80),
-        FlSpot(6, 90),
-        FlSpot(7, 20),
-      ];
-    }
-    else if (index == 4) {
-      return [
-        FlSpot(0, 20),
-        FlSpot(1, 10),
-        FlSpot(2, 50),
-        FlSpot(3, 70),
-        FlSpot(4, 20),
-        FlSpot(5, 10),
-        FlSpot(6, 40),
-        FlSpot(7, 60),
-      ];
-    }
-    else if (index == 5) {
-      return [
-        FlSpot(0, 80),
-        FlSpot(1, 20),
-        FlSpot(2, 10),
-        FlSpot(3, 20),
-        FlSpot(4, 40),
-        FlSpot(5, 10),
-        FlSpot(6, 20),
-        FlSpot(7, 10),
-      ];
-    }
-    else if (index == 6) {
-      return [
-        FlSpot(0, 80),
-        FlSpot(1, 70),
-        FlSpot(2, 80),
-        FlSpot(3, 90),
-        FlSpot(4, 70),
-        FlSpot(5, 80),
-        FlSpot(6, 60),
-        FlSpot(7, 90),
-      ];
     }
     else {
     // 그 외의 경우에 대한 기본값
