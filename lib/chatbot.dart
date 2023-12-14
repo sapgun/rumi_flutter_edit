@@ -301,5 +301,45 @@ class _ChatbotState extends State<Chatbot> {
       print('Could not launch $phoneNumber');
     }
   }
+
+  // _ChatbotState 클래스에 이 메서드를 추가하세요
+  void sendMessageToServer(String userMessage) {
+    // 사용자 메시지를 Flask 서버로 보내고 응답을 처리하는 로직을 구현
+    // 예를 들어, HTTP 요청을 사용할 수 있음.
+
+    // 간단함을 위해 `getChatbotResponse` 함수가 구현되어 있다고 가정
+    // 실제 구현으로 대체하세요.
+    String chatbotResponse = getChatbotResponse(userMessage);
+
+    // 챗봇 응답을 UI에 표시
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('루미 대화'),
+          content: Text(chatbotResponse),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 대화 상자 닫기
+              },
+              child: Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+// _ChatbotState 클래스에 이 메서드를 추가하세요
+  String getChatbotResponse(String userMessage) {
+    // 사용자 메시지를 Flask 서버로 전송하고 챗봇 응답을 받는 로직을 구현
+    // 예를 들어, HTTP 요청을 사용할 수 있음.
+
+    // 간단함을 위해 현재는 정적인 응답을 반환
+    return "루미: 안녕하세요! 받은 메시지: '$userMessage'";
+  }
+
+
 }
 
