@@ -13,17 +13,6 @@ import 'model/wid.dart';
 import 'posedetecter1.dart';
 
 
-Future<List<dynamic>> fetchData() async {
-  final response = await http.get(
-      Uri.parse('https://a296-175-214-183-100.ngrok.io')); /*ngrok으로 주소 변경해야함*/
-
-  if (response.statusCode == 200) {
-    return jsonDecode(response.body);
-  } else {
-    throw Exception('Failed to load data');
-  }
-}
-
 class Myfit extends StatefulWidget {
   const Myfit({Key? key}) : super(key: key);
 
@@ -32,13 +21,13 @@ class Myfit extends StatefulWidget {
 }
 
 class _Myfit extends State<Myfit> {
-  Future<List<dynamic>>? futureData;
   String? name;
   String? birth;
   String? gender;
   String? age;
   VideoPlayerController? _controller;
-  final String videoPath = 'images/2.mp4'; // 동영상 URL를 지정해주세요.
+  final String videoPath = 'images/2.mp4';
+  List<Map<String, dynamic>> data = [];
 
   @override
   void initState() {
@@ -47,8 +36,8 @@ class _Myfit extends State<Myfit> {
       ..initialize().then((_) {
         setState(() {});
       });
-    futureData = fetchData();
     _loadData();
+    fetchData();
 
     _con = YoutubePlayerController(
       initialVideoId: youtubeId,
@@ -57,6 +46,32 @@ class _Myfit extends State<Myfit> {
         mute: false,
       ),
     );
+  }
+  Future<void> fetchData() async {
+    final response = await http.get(
+      Uri.parse('http://localhost:3000/'),
+    );
+    print('Status code: ${response.statusCode}');
+    print('Body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      List<dynamic> result = jsonDecode(response.body)['data'];
+      List<Map<String, dynamic>> data = result.map((item) {
+        DateTime date = DateFormat('yyyy-MM-dd').parse(item['workout_date']);
+        double count = double.parse(item['dumbbell_count'].toString());
+        return {'date': date, 'count': count};
+      }).toList();
+
+      // Sort the data by date
+      data.sort((a, b) => a['date'].compareTo(b['date']));
+
+      setState(() {
+        // Select the last 5 items in the sorted list
+        this.data = data.length > 5 ? data.sublist(data.length - 5) : data;
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
   _loadData() async {
@@ -105,6 +120,7 @@ class _Myfit extends State<Myfit> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -138,20 +154,6 @@ class _Myfit extends State<Myfit> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            FutureBuilder<List<dynamic>>(
-              future: futureData,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data.toString());
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                return CircularProgressIndicator();
-              },
             ),
             SizedBox(
               height: 30.0,
@@ -262,7 +264,7 @@ class _Myfit extends State<Myfit> {
                 style: TextStyle(
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white, // 텍스트 색상을 흰색으로 변경
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -352,34 +354,36 @@ class _Myfit extends State<Myfit> {
                     height: 30.0,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    child: LineChart(
-                      LineChartData(
-                        backgroundColor: Color(0xFFFFFDFD),
-                        gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(show: false),
-                        borderData: FlBorderData(
-                          show: true,
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1,
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      child: data.isEmpty
+                          ? CircularProgressIndicator()
+                          : LineChart(
+                        LineChartData(
+                          backgroundColor: Color(0xFFFFFDFD),
+                          gridData: FlGridData(show: false),
+                          titlesData: FlTitlesData(show: false),
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1,
+                            ),
                           ),
+                          minX: data.first['date'].month.toDouble(),
+                          maxX: data.last['date'].month.toDouble(),
+                          minY: 8,
+                          maxY: 15,
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: pagef.getData(data, _selectedIndex),
+                              isCurved: true,
+                              dotData: FlDotData(show: false),
+                              belowBarData: BarAreaData(show: false),
+                            ),
+                          ],
                         ),
-                        minX: 0,
-                        maxX: 7,
-                        minY: 0,
-                        maxY: 100,
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: pagef.getData(_selectedIndex),
-                            isCurved: true,
-                            dotData: FlDotData(show: false),
-                            belowBarData: BarAreaData(show: false),
-                          ),
-                        ],
                       ),
-                    ),
                   ),
                   SizedBox(
                     height: 30.0,

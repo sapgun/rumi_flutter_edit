@@ -89,7 +89,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   }
 
   Future<void> sendPushUpCount(int pushUpCount) async {
-    final String url = 'https://babb-175-214-183-100.ngrok-free.app'; // 여러분의 Flask 서버 URL로 대체하세요
+    final String url = 'https://e300-14-44-120-103.ngrok-free.app'; // 여러분의 Flask 서버 URL로 대체하세요
 
     final Map<String, dynamic> data = {
       'pushUpCount': pushUpCount,

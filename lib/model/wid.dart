@@ -2,7 +2,11 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+
 class PageF {
+  static const int maxDataToShow = 5;
+  List<Map<String, dynamic>> data = [];
+
   Widget? getText1(int index) {
     if (index == 1) {
       return Text(
@@ -66,20 +70,18 @@ class PageF {
     }
   }
 
-  getData(int index) {
+  List<FlSpot> getData(List<Map<String, dynamic>> data, int index) {
     if (index == 1) {
-      return [
-        FlSpot(0, 30),
-        FlSpot(1, 40),
-        FlSpot(2, 20),
-        FlSpot(3, 60),
-        FlSpot(4, 50),
-        FlSpot(5, 70),
-        FlSpot(6, 70),
-        FlSpot(7, 90),
-      ];
+      return data
+          .take(maxDataToShow)
+          .map((item) =>
+          FlSpot(
+            item['date'].month.toDouble(),
+            item['count'],
+          ))
+          .toList();
     }
-    if (index == 2) {
+    else if (index == 2) {
       return [
         FlSpot(0, 80),
         FlSpot(1, 20),
@@ -91,7 +93,7 @@ class PageF {
         FlSpot(7, 70),
       ];
     }
-    if (index == 3) {
+    else if (index == 3) {
       return [
         FlSpot(0, 30),
         FlSpot(1, 10),
@@ -103,7 +105,7 @@ class PageF {
         FlSpot(7, 20),
       ];
     }
-    if (index == 4) {
+    else if (index == 4) {
       return [
         FlSpot(0, 20),
         FlSpot(1, 10),
@@ -115,7 +117,7 @@ class PageF {
         FlSpot(7, 60),
       ];
     }
-    if (index == 5) {
+    else if (index == 5) {
       return [
         FlSpot(0, 80),
         FlSpot(1, 20),
@@ -127,7 +129,7 @@ class PageF {
         FlSpot(7, 10),
       ];
     }
-    if (index == 6) {
+    else if (index == 6) {
       return [
         FlSpot(0, 80),
         FlSpot(1, 70),
@@ -138,6 +140,10 @@ class PageF {
         FlSpot(6, 60),
         FlSpot(7, 90),
       ];
+    }
+    else {
+    // 그 외의 경우에 대한 기본값
+    return [];
     }
   }
 
