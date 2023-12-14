@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PageF {
   Widget? getText1(int index) {
@@ -8,7 +9,7 @@ class PageF {
         '아령 들기',
         style: TextStyle(
           letterSpacing: 2.0,
-          fontSize: 16.0,
+          fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
       );
@@ -18,7 +19,7 @@ class PageF {
         '앉았다 일어서기',
         style: TextStyle(
           letterSpacing: 2.0,
-          fontSize: 16.0,
+          fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
       );
@@ -28,7 +29,7 @@ class PageF {
         '스텝 테스트',
         style: TextStyle(
           letterSpacing: 2.0,
-          fontSize: 16.0,
+          fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
       );
@@ -38,7 +39,7 @@ class PageF {
         '의자에 앉아 손 뻗기',
         style: TextStyle(
           letterSpacing: 2.0,
-          fontSize: 16.0,
+          fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
       );
@@ -48,17 +49,17 @@ class PageF {
         '등 뒤로 손 닿기',
         style: TextStyle(
           letterSpacing: 2.0,
-          fontSize: 16.0,
+          fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
       );
     }
     if (index == 6) {
       return Text(
-        '의자에서 일어나 장애물(2.4m) 돌아오기',
+        '의자에서 일어나 장애물 돌기',
         style: TextStyle(
           letterSpacing: 2.0,
-          fontSize: 16.0,
+          fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
       );
@@ -68,15 +69,15 @@ class PageF {
   getData(int index) {
     if (index == 1) {
       return [
-          FlSpot(0, 30),
-          FlSpot(1, 40),
-          FlSpot(2, 20),
-          FlSpot(3, 60),
-          FlSpot(4, 50),
-          FlSpot(5, 70),
-          FlSpot(6, 70),
-          FlSpot(7, 90),
-        ];
+        FlSpot(0, 30),
+        FlSpot(1, 40),
+        FlSpot(2, 20),
+        FlSpot(3, 60),
+        FlSpot(4, 50),
+        FlSpot(5, 70),
+        FlSpot(6, 70),
+        FlSpot(7, 90),
+      ];
     }
     if (index == 2) {
       return [
@@ -141,23 +142,36 @@ class PageF {
   }
 
   String? getyoutubeId(int index) {
-    if (index == 1){
+    if (index == 1) {
       return "U_Tv31zKYkk";
     }
-    if (index == 2){
+    if (index == 2) {
       return "wuUt7Cwx08c";
     }
-    if (index == 3){
+    if (index == 3) {
       return "UmCv5C5Yp4U";
     }
-    if (index == 4){
+    if (index == 4) {
       return "U_Tv31zKYkk";
     }
-    if (index == 5){
+    if (index == 5) {
       return "U_Tv31zKYkk";
     }
-    if (index == 6){
+    if (index == 6) {
       return "U_Tv31zKYkk";
     }
+  }
+
+  Widget? getyoutube(String youtubeId, int index) {
+    YoutubePlayerController con = YoutubePlayerController(
+      initialVideoId: youtubeId,
+      flags: const YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+      ),
+    );
+    return YoutubePlayer(
+      controller: con,
+    );
   }
 }
