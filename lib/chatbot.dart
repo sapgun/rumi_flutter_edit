@@ -108,7 +108,7 @@ class _ChatbotState extends State<Chatbot> {
                   ),
                 ),
                 child: Text(
-                  '메인으로 이동',
+                  '처음으로 이동',
                   style: TextStyle(color: Colors.white, fontSize: 30.0),
                 ),
               ),
