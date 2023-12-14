@@ -47,6 +47,14 @@ class _Myfit extends State<Myfit> {
       });
     futureData = fetchData();
     _loadData();
+
+    _con = YoutubePlayerController(
+      initialVideoId: youtubeId,
+      flags: const YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+      ),
+    );
   }
 
   _loadData() async {
@@ -80,14 +88,15 @@ class _Myfit extends State<Myfit> {
   }
 
   static String youtubeId = 'U_Tv31zKYkk';
+  YoutubePlayerController? _con;
 
-  final YoutubePlayerController _con = YoutubePlayerController(
-    initialVideoId: youtubeId,
-    flags: const YoutubePlayerFlags(
-      autoPlay: false,
-      mute: false,
-    ),
-  );
+  // YoutubePlayerController _con = YoutubePlayerController(
+  //   initialVideoId: youtubeId,
+  //   flags: const YoutubePlayerFlags(
+  //     autoPlay: false,
+  //     mute: false,
+  //   ),
+  // );
   bool showOtherData = false;
   int _selectedIndex = 1;
   PageF pagef = PageF();
@@ -159,7 +168,7 @@ class _Myfit extends State<Myfit> {
                         fontSize: 20,
                         color: Colors.white, // 텍스트 색상을 흰색으로 변경
                       ),
-                    ),
+        ),
                   ),
                 ),
                 Container(
@@ -282,7 +291,12 @@ class _Myfit extends State<Myfit> {
                                 _selectedIndex = 6;
                               } else {
                                 _selectedIndex = _selectedIndex - 1;
-                                // youtubeId = pagef.getyoutubeId(_selectedIndex)!;
+                                youtubeId = pagef.getyoutubeId(_selectedIndex)!;
+                                print(youtubeId);
+                                _con!.load(youtubeId);
+                                Future.delayed(Duration(seconds: 1), () {
+                                  _con!.pause(); // 재생 멈추기
+                                });
                               }
                             });
                           },
@@ -308,7 +322,12 @@ class _Myfit extends State<Myfit> {
                                 _selectedIndex = 1;
                               } else {
                                 _selectedIndex = _selectedIndex + 1;
-                                // youtubeId = pagef.getyoutubeId(_selectedIndex)!;
+                                youtubeId = pagef.getyoutubeId(_selectedIndex)!;
+                                print(youtubeId);
+                                _con!.load(youtubeId);
+                                Future.delayed(Duration(seconds: 1), () {
+                                  _con!.pause(); // 재생 멈추기
+                                });
                               }
                             });
                           },
@@ -376,7 +395,7 @@ class _Myfit extends State<Myfit> {
                           ),
                         ),
                         YoutubePlayer(
-                          controller: _con,
+                          controller: _con!,
                         ),
                       ],
                     ),
