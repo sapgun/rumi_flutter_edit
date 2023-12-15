@@ -44,6 +44,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   String? _text_timer = '3';
   String? _text_counter = '0';
   var _cameraLensDirection = CameraLensDirection.back;
+  final String ngrokBaseUrl = "https://7ad4-175-214-183-100.ngrok-free.app";
 
   Timer? _timer;
   int _elapsedTime = 0;
@@ -65,10 +66,10 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
           _text_timer = '${3 - _elapsedTime}';
         } else if (_elapsedTime == 3) {
           _text_timer = '운동 시작!';
-        } else if (_elapsedTime > 3 && _elapsedTime < 33) {
+        } else if (_elapsedTime > 3 && _elapsedTime < 15) {
           _canProcess = true;
           _text_timer = (_elapsedTime - 3).toString();
-        } else if (_elapsedTime >= 33) {
+        } else if (_elapsedTime >= 15) {
           _canProcess = false;
           _text_timer = '수고하셨습니다.\n다음 운동으로 넘어가주세요';
           timer.cancel();
@@ -89,7 +90,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   }
 
   Future<void> sendPushUpCount(int pushUpCount) async {
-    final String url = 'https://e300-14-44-120-103.ngrok-free.app'; // 여러분의 Flask 서버 URL로 대체하세요
+    final String url = '$ngrokBaseUrl/insert'; // 여러분의 Flask 서버 URL로 대체하세요
 
     final Map<String, dynamic> data = {
       'pushUpCount': pushUpCount,
