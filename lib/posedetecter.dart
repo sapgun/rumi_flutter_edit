@@ -44,7 +44,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   String? _text_timer = '3';
   String? _text_counter = '0';
   var _cameraLensDirection = CameraLensDirection.back;
-  final String ngrokBaseUrl = "https://7ad4-175-214-183-100.ngrok-free.app";
+  final String ngrokBaseUrl = "https://e153-175-214-183-100.ngrok-free.app";
 
   Timer? _timer;
   int _elapsedTime = 0;
@@ -57,7 +57,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     startCountdown();
   }
 
-  int _lastPushUpCount = 0; // 이전 푸시업 카운트를 저장할 변수 추가
+  int _lastPushUpCount = 0;
 
   void startCountdown() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -66,10 +66,10 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
           _text_timer = '${3 - _elapsedTime}';
         } else if (_elapsedTime == 3) {
           _text_timer = '운동 시작!';
-        } else if (_elapsedTime > 3 && _elapsedTime < 15) {
+        } else if (_elapsedTime > 3 && _elapsedTime < 33) {
           _canProcess = true;
           _text_timer = (_elapsedTime - 3).toString();
-        } else if (_elapsedTime >= 15) {
+        } else if (_elapsedTime >= 33) {
           _canProcess = false;
           _text_timer = '수고하셨습니다.\n다음 운동으로 넘어가주세요';
           timer.cancel();
@@ -196,15 +196,10 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
         _pushUpState = PushUpState.up;
       }
 
-
-
       setState(() {
         _text_counter = '$_pushUpCount';
       });
     }
-
     _isBusy = false;
   }
-
-
 }

@@ -28,7 +28,7 @@ class _Myfit extends State<Myfit> {
   VideoPlayerController? _controller;
   final String videoPath = 'images/dumbell.mp4';
   List<Map<String, dynamic>> data = [];
-  final String ngrokBaseUrl = "https://7ad4-175-214-183-100.ngrok-free.app";
+  final String ngrokBaseUrl = "https://e153-175-214-183-100.ngrok-free.app";
 
   @override
   void initState() {
@@ -64,7 +64,6 @@ class _Myfit extends State<Myfit> {
         double backCount = double.parse(item['back_count'].toString());
         double handCount = double.parse(item['hand_count'].toString());
         double stepCount = double.parse(item['step_count'].toString());
-        double obstacleCount = double.parse(item['obstacle_count'].toString());
 
         return {
           'date': date,
@@ -73,7 +72,6 @@ class _Myfit extends State<Myfit> {
           'backCount': backCount,
           'handCount': handCount,
           'stepCount': stepCount,
-          'obstacleCount': obstacleCount,
         };
       }).toList();
 
