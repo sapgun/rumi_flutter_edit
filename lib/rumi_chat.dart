@@ -17,6 +17,7 @@ class _rumi_chatState extends State<rumi_chat> {
   FlutterTts flutterTts = FlutterTts();
   final List<ChatMessage> messages = []; // 채팅 메시지를 저장할 목록
   final TextEditingController _controller = TextEditingController();
+  final String ngrokBaseUrl = "https://7ad4-175-214-183-100.ngrok-free.app";
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,7 @@ class _rumi_chatState extends State<rumi_chat> {
   }
 
   Future<void> sendToServer(String userMessage) async {
-    final url = Uri.parse('https://6a87-175-214-183-100.ngrok.io');
+    final url = Uri.parse('$ngrokBaseUrl/generate');
 
     try {
       final response = await http.post(
