@@ -1,83 +1,46 @@
-import 'dart:async';
 import 'dart:math' as math;
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-
+import 'dart:async';
 import 'detector_view.dart';
 import 'painters/pose_painter.dart';
+import 'posedetecter.dart';
 
-enum WalkingState {
-  leftFootUp, rightFootUp
+enum WalkState {
+  stationary, walking
 }
 
-int _walkingCount = 0;
-WalkingState _walkingState = WalkingState.leftFootUp;
-
-class StepPoseDetectorView extends StatefulWidget {
+class WalkDetectorView extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _StepPoseDetectorViewState();
+  State<StatefulWidget> createState() => _WalkDetectorViewState();
 }
 
-class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
+class _WalkDetectorViewState extends State<WalkDetectorView> {
   final PoseDetector _poseDetector = PoseDetector(options: PoseDetectorOptions());
   bool _canProcess = false;
   bool _isBusy = false;
   CustomPaint? _customPaint;
-  String? _text_timer = '3';
-  String? _text_counter = '0';
   var _cameraLensDirection = CameraLensDirection.back;
 
-  Timer? _timer;
-  int _elapsedTime = 0;
+  WalkState _walkState = WalkState.stationary;
+  int _stepCount = 0;
 
   @override
   void initState() {
     super.initState();
-    _text_counter = '0';
-    _walkingCount = 0;
-    startCountdown();
+    startDetection();
   }
 
-  int _lastWalkingCount = 0;
-
-  void startCountdown() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_elapsedTime < 3) {
-          _text_timer = '${3 - _elapsedTime}';
-        } else if (_elapsedTime == 3) {
-          _text_timer = '운동 시작!';
-        } else if (_elapsedTime > 3 && _elapsedTime < 123) {
-          _canProcess = true;
-          _text_timer = (_elapsedTime - 3).toString();
-        } else if (_elapsedTime >= 123) {
-          _canProcess = false;
-          _text_timer = '수고하셨습니다. 운동이 종료되었습니다.';
-          timer.cancel();
-        }
-      });
-
-      _processWalkingCount();
-      _elapsedTime++;
-    });
-  }
-
-  void _processWalkingCount() {
-    if (_walkingState == WalkingState.leftFootUp && _walkingCount != _lastWalkingCount) {
-      setState(() {
-        _text_counter = '$_walkingCount';
-        _lastWalkingCount = _walkingCount;
-      });
-    }
+  void startDetection() {
+    // Start your detection logic if needed
   }
 
   @override
   void dispose() {
+    // Dispose resources and cleanup
     _canProcess = false;
     _poseDetector.close();
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -85,35 +48,14 @@ class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Step Pose Detector'),
+        title: Text('Walk Detector'),
       ),
       body: Column(
-        children: <Widget>[
+        children: [
           Text(
-            _text_timer ?? '',
+            'Step Count: $_stepCount',
             style: TextStyle(fontSize: 24),
           ),
-          Text(
-            _text_counter ?? '',
-            style: TextStyle(fontSize: 24),
-          ),
-          if (_elapsedTime >= 123)
-            ElevatedButton(
-              onPressed: () {
-                // 이동할 다음 페이지로 이동하는 코드를 여기에 추가
-                // 예시: Navigator.push(context, MaterialPageRoute(builder: (context) => AnotherExercisePage()));
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF1F4EF5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-              ),
-              child: Text(
-                '운동 종료, 다른 운동 시작하기',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
           Expanded(
             child: DetectorView(
               customPaint: _customPaint,
@@ -144,21 +86,33 @@ class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
       );
       _customPaint = CustomPaint(painter: painter);
       final pose = poses.first;
+
+      // Your pose detection logic here
+
+      final leftHip = pose.landmarks[PoseLandmarkType.leftHip]!;
+      final leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
       final leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
+
+      final rightHip = pose.landmarks[PoseLandmarkType.rightHip]!;
+      final rightKnee = pose.landmarks[PoseLandmarkType.rightKnee]!;
       final rightAnkle = pose.landmarks[PoseLandmarkType.rightAnkle]!;
 
-      final leftFootUp = leftAnkle.y < pose.landmarks[PoseLandmarkType.leftKnee]!.y;
-      final rightFootUp = rightAnkle.y < pose.landmarks[PoseLandmarkType.rightKnee]!.y;
+      final leftLegAngle = calculateAngle([leftHip, leftKnee, leftAnkle]);
+      final rightLegAngle = calculateAngle([rightHip, rightKnee, rightAnkle]);
 
-      if (leftFootUp && _walkingState == WalkingState.rightFootUp) {
-        _walkingState = WalkingState.leftFootUp;
-        _walkingCount++;
-      } else if (rightFootUp && _walkingState == WalkingState.leftFootUp) {
-        _walkingState = WalkingState.rightFootUp;
+      if ((leftLegAngle > math.pi / 3 || rightLegAngle > math.pi / 3) &&
+          _walkState == WalkState.stationary) {
+        // Leg angle is large, consider it as walking
+        _walkState = WalkState.walking;
+        _stepCount++;
+      } else if ((leftLegAngle < math.pi / 6 && rightLegAngle < math.pi / 6) &&
+          _walkState == WalkState.walking) {
+        // Leg angle is small, consider it as stationary
+        _walkState = WalkState.stationary;
       }
 
       setState(() {
-        _text_counter = '$_walkingCount';
+        // Update UI if needed
       });
     }
 

@@ -198,7 +198,6 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
 
 
 
-
       setState(() {
         _text_counter = '$_pushUpCount';
       });
