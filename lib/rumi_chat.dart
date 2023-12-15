@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:senior_fitness_app/chatbot.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:senior_fitness_app/chatbot.dart';
 
 class rumi_chat extends StatefulWidget {
-  const rumi_chat({super.key});
+  const rumi_chat({Key? key}) : super(key: key);
 
   @override
   State<rumi_chat> createState() => _rumi_chatState();
@@ -17,6 +17,9 @@ class _rumi_chatState extends State<rumi_chat> {
   FlutterTts flutterTts = FlutterTts();
   final List<ChatMessage> messages = []; // 채팅 메시지를 저장할 목록
   final TextEditingController _controller = TextEditingController();
+  final stt.SpeechToText _speech = stt.SpeechToText();
+
+  bool isListening = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,6 @@ class _rumi_chatState extends State<rumi_chat> {
           ),
         ),
       ),
-
       body: Column(
         children: [
           Expanded(
@@ -49,13 +51,35 @@ class _rumi_chatState extends State<rumi_chat> {
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 return Bubble(
-                  content: messages[index].content,  // 수정: message -> content로 변경
+                  content: messages[index].content,
                   isUser: messages[index].isUser,
                 );
               },
             ),
           ),
-
+          BottomAppBar(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: '메시지를 입력하세요...',
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+                    sendMessage(_controller.text);
+                  },
+                ),
+              ],
+            ),
+          ),
           BottomAppBar(
             child: Row(
               children: <Widget>[
@@ -66,7 +90,6 @@ class _rumi_chatState extends State<rumi_chat> {
                         context,
                         MaterialPageRoute(builder: (context) => Chatbot()),
                       );
-                      // 여기에 메인으로 이동 버튼이 눌렸을 때의 동작 추가
                     },
                     style: TextButton.styleFrom(
                       minimumSize: const Size(210.0, 70.0),
@@ -85,28 +108,43 @@ class _rumi_chatState extends State<rumi_chat> {
               ],
             ),
           ),
-          BottomAppBar(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(hintText: '메시지를 입력하세요...'),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    sendMessage(_controller.text);
-                  },
-                ),
-              ],
-            ),
-          ),
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: GestureDetector(
+        onTapDown: (details) async {
+          if (!isListening) {
+            var available = await _speech.initialize();
+            if (available) {
+              setState(() {
+                isListening = true;
+              });
+              _speech.listen(
+                onResult: (result) {
+                  setState(() {
+                    _controller.text = result.recognizedWords;
+                    print(_controller.text);
+                  });
+                },
+              );
+            }
+          }
+        },
+        onTapUp: (details) {
+          setState(() {
+            isListening = false;
+          });
+          _speech.stop();
+        },
+        child: CircleAvatar(
+          backgroundColor: Color(0xFF1F4EF5),
+          radius: 30.0,
+          child: Icon(
+            isListening ? Icons.mic : Icons.mic_none,
+            color: Colors.white,
+            size: 24.0,
+          ),
+        ),
       ),
     );
   }
@@ -122,7 +160,7 @@ class _rumi_chatState extends State<rumi_chat> {
   }
 
   Future<void> sendToServer(String userMessage) async {
-    final url = Uri.parse('https://6a87-175-214-183-100.ngrok.io');
+    final url = Uri.parse('https://4ee7-175-214-183-100.ngrok.io');
 
     try {
       final response = await http.post(
@@ -137,7 +175,6 @@ class _rumi_chatState extends State<rumi_chat> {
         final Map<String, dynamic> data = json.decode(response.body);
         String chatbotResponse = data['generated_text'] ?? '';
 
-        // 추가: 채팅 메시지 출력 여부 확인
         print('챗봇 응답: $chatbotResponse');
 
         if (chatbotResponse.isNotEmpty) {
@@ -156,9 +193,20 @@ class _rumi_chatState extends State<rumi_chat> {
     }
   }
 
-
-
-
+  Future<void> listen() async {
+    if (await _speech.initialize()) {
+      _speech.listen(
+        onResult: (result) {
+          if (result.finalResult) {
+            _controller.text = result.recognizedWords;
+            sendMessage(result.recognizedWords);
+          }
+        },
+      );
+    } else {
+      print('음성 인식 초기화에 실패했습니다.');
+    }
+  }
 }
 
 class ChatMessage {
