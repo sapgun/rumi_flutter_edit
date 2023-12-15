@@ -3,6 +3,8 @@ import 'package:senior_fitness_app/chatbot.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
 
 class rumi_chat extends StatefulWidget {
   const rumi_chat({super.key});
@@ -47,12 +49,13 @@ class _rumi_chatState extends State<rumi_chat> {
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 return Bubble(
-                  message: messages[index].content,
+                  content: messages[index].content,  // 수정: message -> content로 변경
                   isUser: messages[index].isUser,
                 );
               },
             ),
           ),
+
           BottomAppBar(
             child: Row(
               children: <Widget>[
@@ -119,7 +122,7 @@ class _rumi_chatState extends State<rumi_chat> {
   }
 
   Future<void> sendToServer(String userMessage) async {
-    final url = Uri.parse('https://5baf-175-214-183-100.ngrok.io');
+    final url = Uri.parse('https://6a87-175-214-183-100.ngrok.io');
 
     try {
       final response = await http.post(
@@ -166,28 +169,63 @@ class ChatMessage {
 }
 
 class Bubble extends StatelessWidget {
-  final String message;
+  final String content;
   final bool isUser;
 
-  const Bubble({required this.message, required this.isUser});
+  const Bubble({required this.content, required this.isUser});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Align(
-        alignment: isUser ? Alignment.topRight : Alignment.topLeft,
-        child: Container(
-          decoration: BoxDecoration(
-            color: isUser ? Colors.blue : Colors.green,
-            borderRadius: BorderRadius.circular(12),
+      child: Row(
+        mainAxisAlignment:
+        isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!isUser)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Image.asset(
+                'images/rumi.png',
+                width: 48,
+                height: 48,
+                fit: BoxFit.cover,
+              ),
+            ),
+          Flexible(
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.7,
+              ),
+              decoration: BoxDecoration(
+                color: isUser ? Colors.blue : Colors.green,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (content.startsWith('image:'))
+                    Image.asset(
+                      'images/${content.substring(6)}',
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    )
+                  else
+                    Text(
+                      content,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
-          padding: const EdgeInsets.all(12),
-          child: Text(
-            message,
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
+        ],
       ),
     );
   }
