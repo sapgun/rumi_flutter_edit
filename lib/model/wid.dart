@@ -81,8 +81,6 @@ class PageF {
         return -17;
       case 5:
         return -27;
-      case 6:
-        return 4;
       default:
         return 0; // Default value, modify as needed
     }
@@ -100,8 +98,6 @@ class PageF {
         return 15;
       case 5:
         return 4;
-      case 6:
-        return 10;
       default:
         return 100; // Default value, modify as needed
     }
@@ -129,9 +125,6 @@ class PageF {
             break;
           case 5:
             value = item['backCount'] as double? ?? 0.0;
-            break;
-          case 6:
-            value = item['obstacleCount'] as double? ?? 0.0;
             break;
           default:
             value = 0.0;

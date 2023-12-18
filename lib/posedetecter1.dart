@@ -100,10 +100,10 @@ class _ChairPoseDetectorViewState extends State<ChairPoseDetectorView> {
             _text_counter ?? '',
             style: TextStyle(fontSize: 24),
           ),
-          if (_elapsedTime >= 33)
+          if (_elapsedTime >= 10)
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => StepPoseDetectorView()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => WalkDetectorView()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1F4EF5),

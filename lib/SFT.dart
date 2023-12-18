@@ -26,8 +26,9 @@ class _Myfit extends State<Myfit> {
   String? gender;
   String? age;
   VideoPlayerController? _controller;
-  final String videoPath = 'images/2.mp4';
+  final String videoPath = 'images/dumbell.mp4';
   List<Map<String, dynamic>> data = [];
+  final String ngrokBaseUrl = "https://e153-175-214-183-100.ngrok-free.app";
 
   @override
   void initState() {
@@ -49,7 +50,7 @@ class _Myfit extends State<Myfit> {
   }
   Future<void> fetchData() async {
     final response = await http.get(
-      Uri.parse('http://localhost:3000/'),
+      Uri.parse('$ngrokBaseUrl/get_data'),
     );
     print('상태 코드: ${response.statusCode}');
     print('본문: ${response.body}');
@@ -63,7 +64,6 @@ class _Myfit extends State<Myfit> {
         double backCount = double.parse(item['back_count'].toString());
         double handCount = double.parse(item['hand_count'].toString());
         double stepCount = double.parse(item['step_count'].toString());
-        double obstacleCount = double.parse(item['obstacle_count'].toString());
 
         return {
           'date': date,
@@ -72,7 +72,6 @@ class _Myfit extends State<Myfit> {
           'backCount': backCount,
           'handCount': handCount,
           'stepCount': stepCount,
-          'obstacleCount': obstacleCount,
         };
       }).toList();
 
@@ -226,31 +225,6 @@ class _Myfit extends State<Myfit> {
             SizedBox(
               height: 30.0,
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.6,
-              height: MediaQuery.of(context).size.width * 0.1,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PoseDetectorView()),
-                  );
-                },
-                child: Text(
-                  '임시버튼',
-                  style: TextStyle(color: Colors.white, fontSize: 28.0),
-                ),
-                style: TextButton.styleFrom(
-                  backgroundColor: Color(0xFF1F4EF5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
             ElevatedButton(
               onPressed: () {
                 if (_controller!.value.isInitialized) {
@@ -290,7 +264,7 @@ class _Myfit extends State<Myfit> {
               width: MediaQuery.of(context).size.width * 0.8, // 800 대신에 사용
               height: MediaQuery.of(context).size.height * 0.6, // 700 대신에 사용
               decoration: BoxDecoration(
-                color: Color(0xFF83B4F9),
+                color: Color(0xFFE5E5E5),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(

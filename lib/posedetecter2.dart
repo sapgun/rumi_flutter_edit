@@ -1,32 +1,40 @@
-import 'dart:async';
 import 'dart:math' as math;
-
+import 'dart:async';
+import 'dart:convert';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:http/http.dart' as http;
 
 import 'detector_view.dart';
 import 'painters/pose_painter.dart';
+import 'posedetecter.dart';
 
-enum WalkingState {
-  leftFootUp, rightFootUp
+enum WalkState {
+  leftUp,
+  rightUp,
+  leftdown,
+  rightdown,
+  noneUp,
 }
 
-int _walkingCount = 0;
-WalkingState _walkingState = WalkingState.leftFootUp;
+int _stepCount = 0;
+WalkState _walkState = WalkState.noneUp;
 
-class StepPoseDetectorView extends StatefulWidget {
+class WalkDetectorView extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _StepPoseDetectorViewState();
+  State<StatefulWidget> createState() => _WalkDetectorViewState();
 }
 
-class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
+class _WalkDetectorViewState extends State<WalkDetectorView> {
   final PoseDetector _poseDetector = PoseDetector(options: PoseDetectorOptions());
   bool _canProcess = false;
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text_timer = '3';
   String? _text_counter = '0';
+  String? lz = '';
+  String? rz = '';
   var _cameraLensDirection = CameraLensDirection.back;
 
   Timer? _timer;
@@ -36,14 +44,13 @@ class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
   void initState() {
     super.initState();
     _text_counter = '0';
-    _walkingCount = 0;
-    startCountdown();
+    _stepCount = 0;
+    startCountingSteps();
   }
+  int _lastStepCount = 0;
 
-  int _lastWalkingCount = 0;
-
-  void startCountdown() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+  void startCountingSteps() {
+    Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         if (_elapsedTime < 3) {
           _text_timer = '${3 - _elapsedTime}';
@@ -54,21 +61,20 @@ class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
           _text_timer = (_elapsedTime - 3).toString();
         } else if (_elapsedTime >= 123) {
           _canProcess = false;
-          _text_timer = '수고하셨습니다. 운동이 종료되었습니다.';
+          _text_timer = '수고하셨습니다.\n다음 운동으로 넘어가주세요';
           timer.cancel();
         }
       });
-
-      _processWalkingCount();
+      _processStepCount();
       _elapsedTime++;
     });
   }
 
-  void _processWalkingCount() {
-    if (_walkingState == WalkingState.leftFootUp && _walkingCount != _lastWalkingCount) {
+  void _processStepCount() {
+    if (_walkState == WalkState.noneUp && _stepCount != _lastStepCount) {
       setState(() {
-        _text_counter = '$_walkingCount';
-        _lastWalkingCount = _walkingCount;
+        _text_counter = '$_stepCount';
+        _lastStepCount = _stepCount;
       });
     }
   }
@@ -85,23 +91,30 @@ class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Step Pose Detector'),
+        title: Text('120초 제자리걷기'),
       ),
       body: Column(
-        children: <Widget>[
-          Text(
+        children: [
+          Text( // 시간 재주는 부분
             _text_timer ?? '',
             style: TextStyle(fontSize: 24),
           ),
-          Text(
+          Text( //횟수 카운트 해주는 부분
             _text_counter ?? '',
             style: TextStyle(fontSize: 24),
+          ),
+          Text(
+            lz!,
+            style: TextStyle(fontSize: 18),
+          ),
+          Text(
+            rz!,
+            style: TextStyle(fontSize: 18),
           ),
           if (_elapsedTime >= 123)
             ElevatedButton(
               onPressed: () {
-                // 이동할 다음 페이지로 이동하는 코드를 여기에 추가
-                // 예시: Navigator.push(context, MaterialPageRoute(builder: (context) => AnotherExercisePage()));
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => ChairPoseDetectorView()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1F4EF5),
@@ -110,7 +123,7 @@ class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
                 ),
               ),
               child: Text(
-                '운동 종료, 다른 운동 시작하기',
+                '다음 운동으로 넘어가기',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -144,24 +157,41 @@ class _StepPoseDetectorViewState extends State<StepPoseDetectorView> {
       );
       _customPaint = CustomPaint(painter: painter);
       final pose = poses.first;
-      final leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle]!;
-      final rightAnkle = pose.landmarks[PoseLandmarkType.rightAnkle]!;
+      final leftKnee = pose.landmarks[PoseLandmarkType.leftKnee]!;
+      final rightKnee = pose.landmarks[PoseLandmarkType.rightKnee]!;
 
-      final leftFootUp = leftAnkle.y < pose.landmarks[PoseLandmarkType.leftKnee]!.y;
-      final rightFootUp = rightAnkle.y < pose.landmarks[PoseLandmarkType.rightKnee]!.y;
+      // 무릎의 z-값 사용
+      final leftKneeZ = leftKnee.z;
+      final rightKneeZ = rightKnee.z;
 
-      if (leftFootUp && _walkingState == WalkingState.rightFootUp) {
-        _walkingState = WalkingState.leftFootUp;
-        _walkingCount++;
-      } else if (rightFootUp && _walkingState == WalkingState.leftFootUp) {
-        _walkingState = WalkingState.rightFootUp;
+      // 귀하의 요구에 따라 적절한 임계값을 설정하십시오
+      final kneeThreshold = -200;
+
+      if (leftKneeZ < kneeThreshold) {
+        if (_walkState != WalkState.leftUp) {
+          _walkState = WalkState.leftUp;
+          _stepCount++;
+        }
+      } else if (rightKneeZ < kneeThreshold) {
+        if (_walkState != WalkState.rightUp) {
+          _walkState = WalkState.rightUp;
+          _stepCount++;
+        }
+      } else if (leftKneeZ > kneeThreshold && rightKneeZ > kneeThreshold) {
+        if (_walkState == WalkState.leftUp || _walkState == WalkState.rightUp) {
+          _walkState = WalkState.noneUp;
+        }
       }
 
       setState(() {
-        _text_counter = '$_walkingCount';
+        _text_counter = '$_stepCount';
+        lz = '$leftKneeZ';
+        rz = '$rightKneeZ';
       });
     }
 
     _isBusy = false;
   }
+
 }
+
