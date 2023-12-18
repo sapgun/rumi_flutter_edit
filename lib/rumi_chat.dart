@@ -58,6 +58,7 @@ class _rumi_chatState extends State<rumi_chat> {
             ),
           ),
           BottomAppBar(
+            color: Color(0xff8EB3C7FF),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -77,74 +78,76 @@ class _rumi_chatState extends State<rumi_chat> {
                     sendMessage(_controller.text);
                   },
                 ),
-              ],
-            ),
-          ),
-          BottomAppBar(
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Chatbot()),
-                      );
-                    },
-                    style: TextButton.styleFrom(
-                      minimumSize: const Size(210.0, 70.0),
-                      backgroundColor: Color(0xFF1F4EF5),
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Text(
-                      '말동무로 이동',
-                      style: TextStyle(color: Colors.white, fontSize: 30.0),
+                GestureDetector(
+                  onTapDown: (details) async {
+                    if (!isListening) {
+                      var available = await _speech.initialize();
+                      if (available) {
+                        setState(() {
+                          isListening = true;
+                        });
+                        _speech.listen(
+                          onResult: (result) {
+                            setState(() {
+                              _controller.text = result.recognizedWords;
+                              print(_controller.text);
+                            });
+                          },
+                        );
+                      }
+                    }
+                  },
+                  onTapUp: (details) {
+                    setState(() {
+                      isListening = false;
+                    });
+                    _speech.stop();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Color(0xFF1F4EF5),
+                    radius: 30.0,
+                    child: Icon(
+                      isListening ? Icons.mic : Icons.mic_none,
+                      color: Colors.white,
+                      size: 24.0,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: GestureDetector(
-        onTapDown: (details) async {
-          if (!isListening) {
-            var available = await _speech.initialize();
-            if (available) {
-              setState(() {
-                isListening = true;
-              });
-              _speech.listen(
-                onResult: (result) {
-                  setState(() {
-                    _controller.text = result.recognizedWords;
-                    print(_controller.text);
-                  });
-                },
-              );
-            }
-          }
-        },
-        onTapUp: (details) {
-          setState(() {
-            isListening = false;
-          });
-          _speech.stop();
-        },
-        child: CircleAvatar(
-          backgroundColor: Color(0xFF1F4EF5),
-          radius: 30.0,
-          child: Icon(
-            isListening ? Icons.mic : Icons.mic_none,
-            color: Colors.white,
-            size: 24.0,
+          SizedBox(height: 5), // 추가된 간격
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: 80), // 위로 올리고 싶은 만큼의 여유 공간 추가
+              Container(
+                width: 330.0,
+                height: 60.0,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Chatbot()),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color(0xFF1F4EF5),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  child: Text(
+                    '말동무로 이동',
+                    style: TextStyle(color: Colors.white, fontSize: 30.0),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
+
+        ],
       ),
     );
   }
@@ -160,7 +163,7 @@ class _rumi_chatState extends State<rumi_chat> {
   }
 
   Future<void> sendToServer(String userMessage) async {
-    final url = Uri.parse('https://4ee7-175-214-183-100.ngrok.io');
+    final url = Uri.parse('https://5358-211-215-32-91.ngrok.io');
 
     try {
       final response = await http.post(
@@ -228,7 +231,7 @@ class Bubble extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment:
-        isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!isUser)
