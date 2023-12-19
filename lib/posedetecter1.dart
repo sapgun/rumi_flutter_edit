@@ -4,12 +4,13 @@ import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-
 import 'detector_view.dart';
 import 'painters/pose_painter.dart';
 import 'posedetecter.dart';
-import 'package:senior_fitness_app/posedetecter2.dart';
-
+import 'package:senior_fitness_app/SFT.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:senior_fitness_app/video3.dart';
 
 enum ChairState {
   sitting, standing
@@ -31,6 +32,7 @@ class _ChairPoseDetectorViewState extends State<ChairPoseDetectorView> {
   String? _text_timer = '3';
   String? _text_counter = '0';
   var _cameraLensDirection = CameraLensDirection.back;
+  final String ngrokBaseUrl = "https://e346-14-44-120-104.ngrok-free.app";
 
   Timer? _timer;
   int _elapsedTime = 0;
@@ -75,20 +77,44 @@ class _ChairPoseDetectorViewState extends State<ChairPoseDetectorView> {
       });
     }
   }
+  Future<void> sendPushUpCount(int ChairUpCount) async {
+    final String url = '$ngrokBaseUrl/insert'; // 여러분의 Flask 서버 URL로 대체하세요
+
+    final Map<String, dynamic> data = {
+      'ChairUpCount': ChairUpCount,
+    };
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 전송된 경우 여기에서 추가 작업 수행
+      print('푸시업 횟수가 성공적으로 전송되었습니다.');
+    } else {
+      // 전송 중 오류가 발생한 경우 여기에서 처리
+      print('푸시업 횟수 전송 중 오류가 발생했습니다. HTTP 상태 코드: ${response.statusCode}');
+    }
+  }
 
   @override
   void dispose() {
     _canProcess = false;
     _poseDetector.close();
     _timer?.cancel();
+    sendPushUpCount(_lastChairUpCount);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Chair Pose Detector'),
+        backgroundColor: Colors.white,
+        title: Text('30초간 앉았다 일어서기'),
       ),
       body: Column(
         children: <Widget>[
@@ -103,7 +129,7 @@ class _ChairPoseDetectorViewState extends State<ChairPoseDetectorView> {
           if (_elapsedTime >= 10)
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => WalkDetectorView()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => VideoScreen()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1F4EF5),
@@ -126,6 +152,34 @@ class _ChairPoseDetectorViewState extends State<ChairPoseDetectorView> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Color(0xffffffff),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                // 메인 페이지로 이동
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Myfit()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF1F4EF5), // 색상 코드 CEE9E3
+                minimumSize: const Size(210.0, 70.0),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Text('운동페이지로 이동',
+                style: TextStyle(color: Colors.white, fontSize: 30.0),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

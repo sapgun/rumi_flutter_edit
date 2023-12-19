@@ -44,7 +44,9 @@ class _ChatbotState extends State<Chatbot> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: false,
         leadingWidth: 80.0,
         leading: Padding(

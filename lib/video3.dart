@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:senior_fitness_app/posedetecter1.dart';
+import 'package:senior_fitness_app/posedetecter.dart';
 import 'package:senior_fitness_app/SFT.dart';
 
 
@@ -15,7 +15,7 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('images/sit.mp4')
+    _controller = VideoPlayerController.asset('images/dumbell.mp4')
       ..initialize().then((_) {
         setState(() {});
       });
@@ -41,8 +41,8 @@ class _VideoScreenState extends State<VideoScreen> {
           children: [
             _controller!.value.isInitialized
                 ? AspectRatio(
-                    aspectRatio: _controller!.value.aspectRatio,
-                    child: VideoPlayer(_controller!),
+              aspectRatio: _controller!.value.aspectRatio,
+              child: VideoPlayer(_controller!),
             )
                 : CircularProgressIndicator(),
             SizedBox(height: 15),
@@ -55,7 +55,7 @@ class _VideoScreenState extends State<VideoScreen> {
                       // Move to the next page
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ChairPoseDetectorView()),
+                        MaterialPageRoute(builder: (context) => PoseDetectorView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -107,8 +107,8 @@ class _VideoScreenState extends State<VideoScreen> {
               onPressed: () {
                 // 메인 페이지로 이동
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Myfit()),
+                  context,
+                  MaterialPageRoute(builder: (context) => Myfit()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -120,7 +120,7 @@ class _VideoScreenState extends State<VideoScreen> {
                 ),
               ),
               child: Text('운동페이지로 이동',
-                  style: TextStyle(color: Colors.white, fontSize: 30.0),
+                style: TextStyle(color: Colors.white, fontSize: 30.0),
               ),
             )
           ],

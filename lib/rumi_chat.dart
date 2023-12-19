@@ -18,14 +18,16 @@ class _rumi_chatState extends State<rumi_chat> {
   final List<ChatMessage> messages = []; // 채팅 메시지를 저장할 목록ttps://e153-175-214-183-100.ngrok-free.app
   final TextEditingController _controller = TextEditingController();
   final stt.SpeechToText _speech = stt.SpeechToText();
-  final String ngrokBaseUrl = "https://460e-14-44-120-104.ngrok-free.app";
+  final String ngrokBaseUrl = "https://e346-14-44-120-104.ngrok-free.app";
 
   bool isListening = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: false,
         leadingWidth: 80.0,
         leading: Padding(

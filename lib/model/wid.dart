@@ -60,7 +60,7 @@ class PageF {
     }
     if (index == 6) {
       return Text(
-        '의자에서 일어나 장애물 돌기',
+        '장애물(2.4m)\n   돌아오기',
         style: TextStyle(
           letterSpacing: 2.0,
           fontSize: 20.0,
@@ -91,17 +91,17 @@ class PageF {
   double calculateMaxY(int index) {
     switch (index) {
       case 1:
-        return 94;
+        return 100;
       case 2:
-        return 94;
+        return 100;
       case 3:
-        return 94;
+        return 100;
       case 4:
-        return 94;
+        return 100;
       case 5:
-        return 94;
+        return 100;
       case 6 :
-        return 94;
+        return 100;
       default:
         return 100; // Default value, modify as needed
     }

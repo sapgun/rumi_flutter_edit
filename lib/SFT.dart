@@ -26,7 +26,7 @@ class _Myfit extends State<Myfit> {
   String? gender;
   String? age;
   List<Map<String, dynamic>> data = [];
-  final String ngrokBaseUrl = "https://460e-14-44-120-104.ngrok-free.app";
+  final String ngrokBaseUrl = "http://localhost:3000/";
 
   @override
   void initState() {
@@ -132,7 +132,9 @@ class _Myfit extends State<Myfit> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: false,
         leadingWidth: 80.0,
         leading: Padding(
@@ -253,7 +255,7 @@ class _Myfit extends State<Myfit> {
               width: MediaQuery.of(context).size.width * 0.8, // 800 대신에 사용
               height: MediaQuery.of(context).size.height * 0.6, // 700 대신에 사용
               decoration: BoxDecoration(
-                color: Color(0xFFE5E5E5),
+                color: Color(0xFFF8F8F8),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -282,7 +284,10 @@ class _Myfit extends State<Myfit> {
                               }
                             });
                           },
-                          child: Icon(Icons.arrow_back),
+                          child: Icon(
+                              Icons.arrow_back,
+                              color: Color(0xFF000000),
+                          ),
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all(
                                 EdgeInsets.symmetric(
@@ -313,7 +318,10 @@ class _Myfit extends State<Myfit> {
                               }
                             });
                           },
-                          child: Icon(Icons.arrow_forward),
+                          child: Icon(
+                            Icons.arrow_forward,
+                            color: Color(0xFF000000),
+                          ),
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all(
                                 EdgeInsets.symmetric(
@@ -331,16 +339,53 @@ class _Myfit extends State<Myfit> {
                   SizedBox(
                     height: 30.0,
                   ),
+                  Text(
+                    '운동측정결과',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                   SizedBox(
+                    height: 25,
+                  ),
+
                   Container(
                       width: MediaQuery.of(context).size.width * 0.6,
                       height: MediaQuery.of(context).size.height * 0.2,
+
                       child: data.isEmpty
                           ? CircularProgressIndicator()
                           : LineChart(
                         LineChartData(
                           backgroundColor: Color(0xFFFFFDFD),
                           gridData: FlGridData(show: false),
-                          titlesData: FlTitlesData(show: false),
+                          titlesData: FlTitlesData(
+                              show: true,
+
+                              rightTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 30,
+                                  interval: 1,
+                                ),
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  interval: 10,
+                                  reservedSize: 42,
+                                ),
+                              ),
+                          ),
                           borderData: FlBorderData(
                             show: true,
                             border: Border.all(
@@ -356,7 +401,8 @@ class _Myfit extends State<Myfit> {
                             LineChartBarData(
                               spots: pagef.getData(data, _selectedIndex),
                               isCurved: true,
-                              dotData: FlDotData(show: false),
+                              color: Color(0xFF000000),
+                              dotData: FlDotData(show: true),
                               belowBarData: BarAreaData(show: false),
                             ),
                           ],

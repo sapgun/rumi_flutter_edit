@@ -7,6 +7,7 @@ import 'dart:async';
 import 'detector_view.dart';
 import 'painters/pose_painter.dart';
 import 'package:senior_fitness_app/posedetecter1.dart';
+import 'package:senior_fitness_app/SFT.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -44,7 +45,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   String? _text_timer = '3';
   String? _text_counter = '0';
   var _cameraLensDirection = CameraLensDirection.back;
-  final String ngrokBaseUrl = "https://460e-14-44-120-104.ngrok-free.app";
+  final String ngrokBaseUrl = "https://e346-14-44-120-104.ngrok-free.app";
 
   Timer? _timer;
   int _elapsedTime = 0;
@@ -164,6 +165,34 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Color(0xffffffff),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                // 메인 페이지로 이동
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Myfit()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF1F4EF5), // 색상 코드 CEE9E3
+                minimumSize: const Size(210.0, 70.0),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Text('운동페이지로 이동',
+                style: TextStyle(color: Colors.white, fontSize: 30.0),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
