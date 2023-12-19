@@ -72,15 +72,17 @@ class PageF {
   double calculateMinY(int index) {
     switch (index) {
       case 1:
-        return 5;
+        return 60;
       case 2:
-        return 0;
+        return 60;
       case 3:
-        return 40;
+        return 60;
       case 4:
-        return -17;
+        return 60;
       case 5:
-        return -27;
+        return 60;
+      case 6 :
+        return 60;
       default:
         return 0; // Default value, modify as needed
     }
@@ -89,15 +91,17 @@ class PageF {
   double calculateMaxY(int index) {
     switch (index) {
       case 1:
-        return 25;
+        return 94;
       case 2:
-        return 20;
+        return 94;
       case 3:
-        return 120;
+        return 94;
       case 4:
-        return 15;
+        return 94;
       case 5:
-        return 4;
+        return 94;
+      case 6 :
+        return 94;
       default:
         return 100; // Default value, modify as needed
     }
@@ -125,6 +129,9 @@ class PageF {
             break;
           case 5:
             value = item['backCount'] as double? ?? 0.0;
+            break;
+          case 6:
+            value = item['obstacleCount'] as double? ?? 0.0;
             break;
           default:
             value = 0.0;

@@ -44,7 +44,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   String? _text_timer = '3';
   String? _text_counter = '0';
   var _cameraLensDirection = CameraLensDirection.back;
-  final String ngrokBaseUrl = "https://86b3-175-214-183-100.ngrok-free.app";
+  final String ngrokBaseUrl = "https://460e-14-44-120-104.ngrok-free.app";
 
   Timer? _timer;
   int _elapsedTime = 0;

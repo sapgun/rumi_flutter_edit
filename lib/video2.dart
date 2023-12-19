@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:senior_fitness_app/posedetecter.dart';
+import 'package:senior_fitness_app/posedetecter1.dart';
 import 'package:senior_fitness_app/SFT.dart';
 
 
@@ -48,7 +48,7 @@ class _VideoScreenState extends State<VideoScreen> {
                 // 다음 페이지로 이동
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PoseDetectorView()),
+                  MaterialPageRoute(builder: (context) => ChairPoseDetectorView()),
                 );
               },
               child: Text('다음 페이지'),

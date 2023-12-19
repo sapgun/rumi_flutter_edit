@@ -26,7 +26,7 @@ class _Myfit extends State<Myfit> {
   String? gender;
   String? age;
   List<Map<String, dynamic>> data = [];
-  final String ngrokBaseUrl = "https://86b3-175-214-183-100.ngrok-free.app";
+  final String ngrokBaseUrl = "https://460e-14-44-120-104.ngrok-free.app";
 
   @override
   void initState() {
@@ -58,6 +58,7 @@ class _Myfit extends State<Myfit> {
         double backCount = double.parse(item['back_count'].toString());
         double handCount = double.parse(item['hand_count'].toString());
         double stepCount = double.parse(item['step_count'].toString());
+        double obstacleCount = double.parse(item['obstacle_count'].toString());
 
         return {
           'date': date,
@@ -66,6 +67,7 @@ class _Myfit extends State<Myfit> {
           'backCount': backCount,
           'handCount': handCount,
           'stepCount': stepCount,
+          'obstacleCount' : obstacleCount
         };
       }).toList();
 
