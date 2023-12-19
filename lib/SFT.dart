@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
-import 'package:senior_fitness_app/video2.dart';
+import 'package:senior_fitness_app/camera.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:senior_fitness_app/posedetecter.dart';
@@ -25,18 +25,12 @@ class _Myfit extends State<Myfit> {
   String? birth;
   String? gender;
   String? age;
-  VideoPlayerController? _controller;
-  final String videoPath = 'images/dumbell.mp4';
   List<Map<String, dynamic>> data = [];
-  final String ngrokBaseUrl = "https://e153-175-214-183-100.ngrok-free.app";
+  final String ngrokBaseUrl = "https://86b3-175-214-183-100.ngrok-free.app";
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(videoPath)
-      ..initialize().then((_) {
-        setState(() {});
-      });
     _loadData();
     fetchData();
 
@@ -227,17 +221,10 @@ class _Myfit extends State<Myfit> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (_controller!.value.isInitialized) {
-                  setState(() {
-                    _controller!.value.isPlaying
-                        ? _controller!.pause()
-                        : _controller!.play();
-                  });
-                }
                 // 여기에 측정하기 버튼이 눌렸을 때의 동작 추가
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => VideoScreen()),
+                  MaterialPageRoute(builder: (context) => CameraPage()),
                 );
               },
               style: ElevatedButton.styleFrom(

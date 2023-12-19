@@ -15,9 +15,10 @@ class rumi_chat extends StatefulWidget {
 
 class _rumi_chatState extends State<rumi_chat> {
   FlutterTts flutterTts = FlutterTts();
-  final List<ChatMessage> messages = []; // 채팅 메시지를 저장할 목록
+  final List<ChatMessage> messages = []; // 채팅 메시지를 저장할 목록ttps://e153-175-214-183-100.ngrok-free.app
   final TextEditingController _controller = TextEditingController();
   final stt.SpeechToText _speech = stt.SpeechToText();
+  final String ngrokBaseUrl = "https://86b3-175-214-183-100.ngrok-free.app";
 
   bool isListening = false;
 
@@ -163,7 +164,7 @@ class _rumi_chatState extends State<rumi_chat> {
   }
 
   Future<void> sendToServer(String userMessage) async {
-    final url = Uri.parse('https://5358-211-215-32-91.ngrok.io');
+    final url = Uri.parse('$ngrokBaseUrl/generate');
 
     try {
       final response = await http.post(
