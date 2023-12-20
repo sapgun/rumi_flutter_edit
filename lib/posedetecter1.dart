@@ -68,12 +68,31 @@ class _ChairPoseDetectorViewState extends State<ChairPoseDetectorView> {
       _elapsedTime++;
     });
   }
+  int getModifiedLastChairUpCount(int lastChairUpCount) {
+    if (lastChairUpCount > 4 && lastChairUpCount <= 6) {
+      return 92;
+    } else if (lastChairUpCount > 6 && lastChairUpCount <= 8) {
+      return 87;
+    } else if (lastChairUpCount > 8 && lastChairUpCount <= 10) {
+      return 82;
+    } else if (lastChairUpCount > 10 && lastChairUpCount <= 12) {
+      return 77;
+    } else if (lastChairUpCount > 12 && lastChairUpCount <= 14) {
+      return 72;
+    } else if (lastChairUpCount > 14 && lastChairUpCount <= 16) {
+      return 67;
+    } else if (lastChairUpCount > 16 && lastChairUpCount <= 18) {
+      return 62;
+    } else {
+      return 0;
+    }
+  }
 
   void _processChairUpCount() {
     if (_chairState == ChairState.standing && _chairUpCount != _lastChairUpCount) {
       setState(() {
         _text_counter = '$_chairUpCount';
-        _lastChairUpCount = _chairUpCount;
+        _lastChairUpCount = getModifiedLastChairUpCount(_chairUpCount);
       });
     }
   }
